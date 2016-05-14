@@ -1,0 +1,59 @@
+<!--
+
+   AlsaGPS is a panic button app for Android
+   Copyright (C) 2016 Moisés Díaz
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software Foundation,
+   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+
+ -->
+
+<resources>
+    <string name="app_name">AlsaGPS</string>
+    <string name="name_app">Always safe</string>
+    <string name="help_button_text">Help!</string>
+    <string name="button_text_off">Off</string>
+    <string name="button_text_on">On</string>
+    <string name="settings_text">Settings</string>
+    <string name="starting_point_text">Starting points</string>
+    <string name="about_text">About</string>
+    <string name="about_interrogation_text">"?"</string>
+    <string name="back_text">Back</string>
+    <string name="contacts_text">Contacts</string>
+    <string name="personal_message_text">Personal message</string>
+    <string name="location_frequency_text">Location frequency</string>
+    <string name="time_before_warn_text">Time before warn</string>
+    <string name="check_contact_list">Check you contact list</string>
+    <string name="starting_point_description">Icon starting point</string>
+    <string name="settings_description">Icon settings</string>
+    <string name="start_text">Start!</string>
+    <string name="remove_text">X</string>
+    <string name="add_text">+</string>
+    <string name="add_contact_text">Add contact</string>
+    <string name="add_contacts_list_text">Add contacts to the list</string>
+    <string name="save_text">Save</string>
+    <string name="type_number_text">Type number here</string>
+    <string name="location_frequency_input_text">Type location frequency (in minutes)</string>
+    <string name="time_warn_input_text">Time to warn (in hours)</string>
+    <string name="cancel_text">Cancel</string>
+    <string name="type_personal_message_text">Type here your personal message</string>
+    <string name="current_position_text">Current \n position</string>
+    <string name="latitude_text">Latitude:</string>
+    <string name="longitude_text">Longitude:</string>
+    <string name="name_current_position_text">Type name current position</string>
+    <string name="save_current_position_text">Save current position</string>
+    <string name="contact_info_text">Contact details: \n always_safe_gps@gmail.com \n @alwayssafegps</string>
+    <string name="market_text">If you are satisfied with the app \n please give us a good review \n in the play store</string>
+    <string name="developer_text">AlwaysSafeGPS was developed \n by Moises Diaz</string>
+</resources>

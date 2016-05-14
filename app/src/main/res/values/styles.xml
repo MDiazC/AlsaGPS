@@ -1,0 +1,854 @@
+<!--
+
+   AlsaGPS is a panic button app for Android
+   Copyright (C) 2016 Moisés Díaz
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software Foundation,
+   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+
+ -->
+
+<resources>
+
+    <!-- Base application theme. -->
+    <!-- Al heredar de NoActionBar la barra del nombre de la app desaprece-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <!-- end of default styles -->
+
+        <item name="android:background">@color/background_color</item>
+    </style>
+
+
+    <!-- +++++++++++++++ GENERIC STYLE +++++++++++++++++++ -->
+
+    <style name="headerText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textSize">@dimen/text_header</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:textColor">@color/white_color</item>
+        <item name="android:gravity">top</item>
+    </style>
+
+    <style name="layoutInternalScreen">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingBottom">@dimen/height_bottom_bar_plus_margin</item>
+    </style>
+
+    <style name="layoutHeader">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="layoutInnerBottomBar">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="textBottomBar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white_color</item>
+        <item name="android:textSize">@dimen/bottom_bar</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+    </style>
+
+    <style name="imageBottomBar">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:adjustViewBounds">true</item>
+    </style>
+
+    <style name="layoutBlankButton">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/round_rectangle_white</item>
+    </style>
+
+    <style name="layoutBody">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:weightSum">4</item>
+    </style>
+
+    <style name="blankButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textColor">@color/black_color</item>
+        <item name="android:textSize">@dimen/settings_button</item>
+        <item name="android:gravity">center</item>
+        <!-- layout_marginLeft y  layout_marginStart should be together because of the different APIS -->
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_alignParentTop">false</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:layout_marginLeft">15dp</item>
+    </style>
+
+    <style name="textFirstTime">
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/purple_color</item>
+        <item name="android:textSize">@dimen/first_time_text</item>
+    </style>
+
+    <style name="arrowFirstTime">
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">180dp</item>
+        <item name="android:src">@drawable/arrow_purple</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:scaleType">fitXY</item>
+    </style>
+
+
+    <style name="circleAddContactButtonFirstTime">
+        <item name="android:layout_width">340dp</item>
+        <item name="android:layout_height">120dp</item>
+        <item name="android:gravity">center</item>
+        <!-- layout_marginLeft y  layout_marginStart should be together because of the different APIS -->
+        <item name="android:background">@drawable/round_emphasize_circle</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <!-- +++++++++++++++ END OF GENERIC STYLE +++++++++++++++++++ -->
+    <!-- +++++++++++++++ LOADING SCREEN +++++++++++++++++++ -->
+
+    <style name="layoutHelpButton">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">240dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">60dp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="helpButton">
+        <item name="android:layout_width">230dp</item>
+        <item name="android:layout_height">230dp</item>
+        <item name="android:background">@drawable/round_button_help_disabled</item>
+        <item name="android:textSize">@dimen/help_button_font_size</item>
+        <item name="android:text">@string/help_button_text</item>
+        <item name="android:textColor">@color/grey_button</item>
+    </style>
+
+    <style name="layoutBlankAppName">
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:background">@drawable/round_rectangle_white</item>
+        <item name="android:layout_width">230dp</item>
+        <item name="android:layout_marginTop">@dimen/height_bottom_bar_plus_margin</item>
+    </style>
+
+    <style name="mainAppName">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:text">@string/name_app</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/black_color</item>
+        <item name="android:textSize">@dimen/app_name</item>
+    </style>
+
+    <style name="layoutLoadingScreen">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+
+<!-- +++++++++++++++ END OF LOADING SCREEN +++++++++++++++++++ -->
+
+<!-- +++++++++++++++ INITIAL SCREEN +++++++++++++++++++ -->
+
+    <style name="layoutLayoutSwitchButton">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_marginTop">80dp</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="layoutSwitchButton">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_width">230dp</item>
+        <item name="android:layout_height">match_parent</item>
+
+        <!-- layout_marginLeft y  layout_marginStart should be together because of the different APIS -->
+        <item name="android:layout_alignParentTop">false</item>
+        <item name="android:background">@drawable/round_rectangle_white</item>
+        <item name="android:weightSum">2</item>
+    </style>
+
+    <style name="switchButton">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:background">@drawable/round_rectangle_grey</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="switchLayoutText">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">wrap_content</item>
+
+    </style>
+
+    <style name="switchText">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">@string/button_text_off</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/black_color</item>
+        <item name="android:textSize">@dimen/app_name</item>
+    </style>
+
+    <style name="switchTextOn" parent="switchText">
+        <item name="android:text">@string/button_text_on</item>
+    </style>
+
+    <style name="switchButtonOn" parent="switchButton">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@drawable/round_rectangle_green</item>
+        <item name="android:layout_marginRight">2dp</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="helpButtonOn">
+        <item name="android:layout_width">230dp</item>
+        <item name="android:layout_height">230dp</item>
+        <item name="android:background">@drawable/round_button_help_enabled</item>
+        <item name="android:textSize">@dimen/help_button_font_size</item>
+        <item name="android:text">@string/help_button_text</item>
+        <item name="android:textColor">@color/white_color</item>
+    </style>
+
+    <style name="layoutAppDisabled">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/height_bottom_bar_plus_margin</item>
+    </style>
+
+    <style name="layoutAppEnabled">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="initialScreenLayoutFirstTime">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@color/white_background</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:layout_marginBottom">@dimen/height_bottom_bar</item>
+    </style>
+
+    <style name="initialScreenTextFirstTime">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">@string/start_text</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textSize">@dimen/start_first_time_text</item>
+        <item name="android:textColor">@color/purple_color</item>
+        <item name="android:layout_marginLeft">40dp</item>
+    </style>
+
+    <style name="initialScreenImageFirstTime">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:src">@drawable/arrow_purple</item>
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">200dp</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+<!-- +++++++++++++++ END OF INITIAL SCREEN +++++++++++++++++++ -->
+<!-- +++++++++++++++ MENU BOTTOM BAR ++++++++++++++++++++-->
+
+    <style name="bottomBar">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_height">@dimen/height_bottom_bar</item>
+        <item name="android:background">@color/black_color</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:weightSum">3</item>
+    </style>
+
+    <style name="aboutText" parent="textBottomBar">
+        <item name="android:text">@string/about_text</item>
+    </style>
+
+    <style name="aboutInterrogation">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:textColor">@color/white_color</item>
+        <item name="android:textSize">@dimen/about_interrogation</item>
+        <item name="android:text">@string/about_interrogation_text</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="startingPointText" parent="textBottomBar">
+        <item name="android:text">@string/starting_point_text</item>
+    </style>
+
+    <style name="startingPointImage"  parent="imageBottomBar">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:src">@drawable/localization_white</item>
+    </style>
+
+    <style name="settingsText" parent="textBottomBar">
+        <item name="android:text">@string/settings_text</item>
+    </style>
+
+    <style name="settingsImage" parent="imageBottomBar">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:src">@drawable/settings_white</item>
+    </style>
+
+
+<!-- +++++++++++++++ END OF MENU BOTTOM BAR ++++++++++++++++++++-->
+
+<!-- +++++++++++++++ MENU BOTTOM BAR FIRST TIME ++++++++++++++++++++-->
+
+    <style name="layoutBottomBarFirstTime">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="layoutInnerBottomBarFirstTime" parent="layoutInnerBottomBar">
+        <item name="android:background">@color/white_background</item>
+    </style>
+
+<!-- +++++++++++++++ END OF MENU BOTTOM BAR FIRST TIME ++++++++++++++++++++-->
+
+<!-- +++++++++++++++ BACK BOTTOM SCREEN +++++++++++++++++++ -->
+
+    <style name="backBottomBar" parent="bottomBar">
+        <item name="android:weightSum">2</item>
+    </style>
+
+    <style name="layoutBackBottomBar" parent="layoutInnerBottomBar">
+        <item name="android:layout_width">60dp</item>
+    </style>
+
+    <style name="backText" parent="textBottomBar">
+        <item name="android:text">@string/back_text</item>
+    </style>
+
+    <style name="backImage" parent="imageBottomBar">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:src">@drawable/back_arrow</item>
+    </style>
+
+<!-- +++++++++++++++ END OF BACK BOTTOM SCREEN +++++++++++++++++++ -->
+
+<!-- +++++++++++++++ SETTINGS SCREEN +++++++++++++++++++ -->
+
+
+    <style name="layoutSettings" parent="layoutInternalScreen">
+        <item name="android:layout_gravity">top</item>
+    </style>
+
+    <style name="layoutBodySettings" parent="layoutBody">
+        <item name="android:weightSum">4</item>
+    </style>
+
+    <style name="headerBarYellow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">3dp</item>
+        <item name="android:background">@color/yellow_split_line_color</item>
+    </style>
+
+    <style name="settingsHeaderText" parent="headerText">
+        <item name="android:text">@string/settings_text</item>
+    </style>
+
+
+    <!-- FIRST TIME -->
+    <style name="settingsTextFirstTime" parent="textFirstTime">
+        <item name="android:text">@string/check_contact_list</item>
+    </style>
+
+
+    <style name="settingsArrowFirstTime" parent="arrowFirstTime">
+        <item name="android:src">@drawable/arrow_purple</item>
+        <item name="android:rotation">180</item>
+    </style>
+
+    <style name="addContactButtonFirstTime">
+        <item name="android:layout_width">270dp</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textColor">@color/black_color</item>
+        <item name="android:textSize">@dimen/settings_button</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/round_rectangle_white_first_time</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginLeft">30dp</item>
+    </style>
+
+    <style name="layoutSettingsFirstTime">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center_horizontal</item>
+        <!-- layout_marginLeft y  layout_marginStart should be together because of the different APIS -->
+        <item name="android:background">@color/white_background</item>
+    </style>
+
+    <style name="layoutAddContactButtonFirstTimeSettings">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+
+    <!-- END OF FIRST TIME -->
+
+    <!-- +++++++++++++++ LOCATION FREQUENCY / TIME TO WARN SCREENS +++++++++++++++++++ -->
+
+    <style name="layoutOptions">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@color/grey_layout</item>
+    </style>
+
+    <style name="bottomLayoutOptions">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">200dp</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@color/dark_grey_layout</item>
+    </style>
+
+    <style name="layoutOptionInput">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:weightSum">3</item>
+        <item name="android:layout_marginTop">30dp</item>
+    </style>
+
+    <style name="optionText">
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:textColor">@color/white_color</item>
+        <item name="android:textSize">23dp</item>
+    </style>
+
+    <style name="backgroundOptionInput">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">2</item>
+        <item name="android:background">@color/white_color</item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_marginLeft">20dp</item>
+    </style>
+
+    <style name="optionInput" parent="addContactInput">
+        <item name="android:layout_marginTop">-1dp</item>
+    </style>
+
+
+    <style name="layoutOptionsButtons">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:weightSum">2</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_marginTop">10dp</item>
+    </style>
+
+    <style name="optionsButtonSave" parent="layoutBlankButton">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginRight">40dp</item>
+        <item name="android:layout_marginLeft">20dp</item>
+    </style>
+
+    <style name="optionsButtonCancel" parent="layoutBlankButton">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_marginLeft">40dp</item>
+    </style>
+
+
+    <!-- +++++++++++++++ END OF LOCATION FREQUENCY / TIME TO WARN SCREENS +++++++++++++++++++ -->
+
+
+    <!-- +++++++++++++++ END OF SETTINGS SCREEN +++++++++++++++++++ -->
+
+    <!-- +++++++++++++++ CONTACTS SCREEN +++++++++++++++++++ -->
+
+    <style name="layoutBodyContacts" parent="layoutBody">
+        <item name="android:weightSum">4</item>
+    </style>
+
+    <style name="layoutListContacts" parent="layoutBlankButton">
+        <item name="android:gravity">top</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:layout_height">225dp</item>
+    </style>
+
+    <style name="removeButton">
+        <item name="android:layout_width">25dp</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:background">@drawable/round_button_remove</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:text">@string/remove_text</item>
+        <item name="android:textColor">@color/white_color</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+    </style>
+
+    <style name="contactName">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/black_color</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+    </style>
+
+    <style name="layoutContact">
+        <item name="android:layout_width">250dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">7dp</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="layoutAddContactButton" parent="layoutBlankButton">
+
+    </style>
+
+    <style name="buttonAddContact" parent="blankButton">
+        <item name="android:text">@string/add_contact_text</item>
+    </style>
+
+
+    <style name="listContactHeaderText" parent="headerText">
+        <item name="android:text">@string/contacts_text</item>
+    </style>
+
+    <!-- FIRST TIME -->
+
+    <style name="layoutListContactFirstTime" parent="layoutInternalScreen">
+        <item name="android:background">@color/white_background</item>
+    </style>
+
+    <style name="layoutBodyContactsFirstTime" parent="layoutBody">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="layoutBlankContactsFirstTime" parent="layoutListContacts">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="contactsTextFirstTime" parent="textFirstTime">
+        <item name="android:text">@string/add_contacts_list_text</item>
+        <item name="android:layout_marginTop">30dp</item>
+    </style>
+
+    <style name="buttonAddContactFirstTime" parent="buttonAddContact">
+        <item name="android:background">@drawable/round_rectangle_white_first_time</item>
+        <item name="android:layout_width">260dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginLeft">40dp</item>
+    </style>
+
+    <style name="layoutAddContactButtonFirstTimeContacts">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">-15dp</item>
+    </style>
+
+
+    <!-- END OF FIRST TIME -->
+
+    <!-- +++++++++++++++ END OF CONTACTS SCREEN +++++++++++++++++++ -->
+
+    <!-- +++++++++++++++ ADD CONTACT SCREEN +++++++++++++++++++ -->
+
+    <style name="addContactHeaderText" parent="headerText">
+        <item name="android:text">@string/add_contact_text</item>
+    </style>
+
+    <style name="layoutListContactsPhonebook" parent="layoutListContacts">
+        <item name="android:layout_height">150dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_marginBottom">20dp</item>
+    </style>
+
+    <style name="headerBarRed">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">3dp</item>
+        <item name="android:background">@color/red_split_line_color</item>
+    </style>
+
+    <style name="addButton">
+        <item name="android:layout_width">25dp</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:background">@drawable/round_button_add</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:text">@string/add_text</item>
+        <item name="android:textColor">@color/white_color</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+    </style>
+
+    <style name="addContactInput">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:inputType">phone</item>
+        <item name="android:ems">10</item>
+    </style>
+
+    <style name="buttonSaveContact" parent="blankButton">
+        <item name="android:text">@string/save_text</item>
+    </style>
+
+
+    <style name="backgroundAddContactInput" parent="blankButton">
+        <item name="android:background">@color/white_color</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
+    </style>
+
+
+
+    <!-- +++++++++++++++ END OF ADD CONTACT SCREEN +++++++++++++++++++ -->
+
+    <!-- +++++++++++++++ PERSONAL MESSAGE SCREEN +++++++++++++++++++ -->
+
+    <style name="personalMessagetHeaderText" parent="headerText">
+        <item name="android:text">@string/personal_message_text</item>
+        <item name="android:textSize">40dp</item>
+    </style>
+
+    <style name="layoutListPersonalMessage" parent="layoutBlankButton">
+        <item name="android:gravity">top</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:layout_height">225dp</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">300dp</item>
+    </style>
+
+    <style name="buttonSavePersonalMessage" parent="blankButton">
+        <item name="android:text">@string/save_text</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="personalMessageText">
+        <item name="android:layout_width">300dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:maxLength">50</item>
+        <item name="android:hint">@string/type_personal_message_text</item>
+    </style>
+
+    <style name="layoutBodyPersonalMessage" parent="layoutBody">
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="layoutSaveButtonPersonalMessage" parent="layoutBlankButton">
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <!-- +++++++++++++++ END OF PERSONAL MESSAGE SCREEN +++++++++++++++++++ -->
+
+    <!-- +++++++++++++++ STARTING POINT SCREEN +++++++++++++++++++ -->
+
+    <style name="bodyStartingPoint" parent="layoutBody">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="startingPointHeaderText" parent="headerText">
+        <item name="android:text">@string/starting_point_text</item>
+    </style>
+
+    <style name="layoutCurrentPosition">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">300dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:weightSum">2</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+    </style>
+
+    <style name="currentPositionLabel">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:text">@string/current_position_text</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/white_color</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="currentPositionIndicator">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">150dp</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:weightSum">2</item>
+        <item name="android:background">@color/white_color</item>
+    </style>
+
+    <style name="currentPositionRow">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:weightSum">2</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="currentPositionColumnLeft">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="currentPositionColumnRight">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="layoutCurrentPositionInput">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">270dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:background">@color/white_color</item>
+    </style>
+
+    <style name="buttonSaveCurrentPosition" parent="blankButton">
+        <item name="android:text">@string/save_current_position_text</item>
+    </style>
+
+    <style name="currentPositionButton" parent="layoutBlankButton">
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="currentPositionName" parent="addContactInput">
+        <item name="android:hint">@string/name_current_position_text</item>
+    </style>
+
+
+    <!-- +++++++++++++++ END OF STARTING POINT SCREEN +++++++++++++++++++ -->
+
+
+    <!-- +++++++++++++++ ABOUT SCREEN +++++++++++++++++++ -->
+
+    <style name="aboutHeaderText" parent="headerText">
+        <item name="android:text">@string/about_text</item>
+    </style>
+
+    <style name="aboutLayouts" parent="layoutBlankButton">
+        <item name="android:gravity">top</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:layout_marginRight">60dp</item>
+        <item name="android:layout_marginLeft">60dp</item>
+    </style>
+
+
+    <style name="aboutLayoutText" parent="blankButton">
+        <item name="android:textSize">16dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+    </style>
+
+    <style name="aboutContactText" parent="aboutLayoutText">
+        <item name="android:text">@string/contact_info_text</item>
+    </style>
+
+    <style name="aboutMarketText" parent="aboutLayoutText">
+        <item name="android:text">@string/market_text</item>
+    </style>
+
+    <style name="aboutDeveloperText" parent="aboutLayoutText">
+        <item name="android:text">@string/developer_text</item>
+    </style>
+
+    <!-- +++++++++++++++ END OF ABOUT SCREEN +++++++++++++++++++ -->
+
+
+<!-- +++++++++++++++ INITIAL SCREEN +++++++++++++++++++ -->
+<!-- +++++++++++++++ END OF INITIAL SCREEN +++++++++++++++++++ -->
+
+
+</resources>

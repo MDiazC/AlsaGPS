@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+   AlsaGPS is a panic button app for Android
+   Copyright (C) 2016 Moisés Díaz
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software Foundation,
+   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+
+ -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:id="@+id/layout_about"
+            style="@style/layoutInternalScreen"
+            android:gravity="top">
+
+            <LinearLayout
+                android:id="@+id/layout_header"
+                style="@style/layoutHeader">
+
+                <TextView
+                    android:id="@+id/about_header_text"
+                    style="@style/aboutHeaderText"/>
+
+                <View
+                    android:id="@+id/settings_bar_yellow"
+                    style="@style/headerBarYellow" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout_body_about"
+                style="@style/layoutBody"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/layout_social_media"
+                    style="@style/aboutLayouts">
+                    <TextView
+                        android:id="@+id/social_media_message"
+                        style="@style/aboutContactText"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_market"
+                    style="@style/aboutLayouts">
+                    <TextView
+                        android:id="@+id/market_message"
+                        style="@style/aboutMarketText"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_developer"
+                    style="@style/aboutLayouts">
+                    <TextView
+                        android:id="@+id/developer_message"
+                        style="@style/aboutDeveloperText"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- BOTTOM BAR -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/backBottomBar"
+        android:id="@+id/back_bottom_bar"
+        android:layout_gravity="bottom">
+
+        <include layout="@layout/back_bottom_bar" />
+
+    </LinearLayout>
+
+    <!-- END BOTTOM BAR -->
+
+</RelativeLayout>

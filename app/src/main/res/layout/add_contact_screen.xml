@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+   AlsaGPS is a panic button app for Android
+   Copyright (C) 2016 Moisés Díaz
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software Foundation,
+   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+
+ -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:id="@+id/layout_contacts_phonebook"
+            style="@style/layoutInternalScreen">
+
+            <LinearLayout
+                android:id="@+id/layout_header"
+                style="@style/layoutHeader">
+
+                <TextView
+                    android:id="@+id/list_contact_phonebook_header_text"
+                    style="@style/addContactHeaderText"/>
+
+                <View
+                    android:id="@+id/settings_bar_yellow"
+                    style="@style/headerBarYellow" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout_body_contacts_phonebook"
+                style="@style/layoutBody"
+                android:layout_width="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/layout_blank_contacts_phonebook"
+                    style="@style/layoutListContactsPhonebook">
+
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/listView"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1" />
+
+
+                    <RelativeLayout
+                        style="@style/layoutContact">
+
+                        <TextView
+                            style="@style/contactName"
+                            android:text="Pepe"/>
+
+                        <Button
+                            style="@style/addButton"
+                            android:clickable="true"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        style="@style/layoutContact">
+
+                        <TextView
+                            style="@style/contactName"
+                            android:text="Pepe"/>
+
+                        <Button
+                            style="@style/addButton"
+                            android:clickable="true"/>
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+
+                <View
+                    android:id="@+id/settings_bar"
+                    style="@style/headerBarRed" />
+
+                <LinearLayout
+                    android:id="@+id/layout_input_number"
+                    style="@style/backgroundAddContactInput">
+                    <EditText
+                        android:id="@+id/add_contact_input"
+                        style="@style/addContactInput"
+                        android:hint="@string/type_number_text"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_add_contact_button"
+                    style="@style/layoutBlankButton">
+
+                    <TextView
+                        android:id="@+id/message_button"
+                        style="@style/buttonSaveContact" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- BOTTOM BAR -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/backBottomBar"
+        android:id="@+id/back_bottom_bar"
+        android:layout_gravity="bottom">
+
+        <include layout="@layout/back_bottom_bar" />
+
+    </LinearLayout>
+
+    <!-- END BOTTOM BAR -->
+
+</RelativeLayout>

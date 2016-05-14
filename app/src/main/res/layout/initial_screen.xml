@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+   AlsaGPS is a panic button app for Android
+   Copyright (C) 2016 Moisés Díaz
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software Foundation,
+   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+
+ -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- LAYOUT APP DISABLED -->
+        <LinearLayout
+            android:orientation="vertical"
+            style="@style/layoutAppDisabled">
+
+
+            <!-- SWITCH BUTTON -->
+            <LinearLayout
+                android:id="@+id/layout_layout_switch_button_disabled"
+                style="@style/layoutLayoutSwitchButton">
+
+                <LinearLayout
+                    android:id="@+id/layout_switch_button"
+                    style="@style/layoutSwitchButton">
+
+                    <!-- SWITCH BUTTON OFF-->
+                    <LinearLayout
+                        style="@style/switchButton"
+                        android:id="@+id/switch_button"
+                        android:clickable="true">
+                    </LinearLayout>
+
+                    <!-- SWITCH BUTTON TEXT OFF-->
+                    <LinearLayout
+                        style="@style/switchLayoutText"
+                        android:id="@+id/switch_layout_text"
+                        android:clickable="true">
+
+                        <TextView
+                            style="@style/switchText"
+                            android:id="@+id/switch_text" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/layoutHelpButton"
+                android:id="@+id/layout_help_button_disabled" >
+
+                <!-- HELP BUTTON GREY -->
+                <Button
+                    style="@style/helpButton"
+                    android:id="@+id/help_button"/>
+
+            </LinearLayout>
+        </LinearLayout>
+        <!-- END OF LAYOUT APP DISABLED -->
+
+        <!-- LAYOUT APP ENABLED -->
+        <LinearLayout
+            style="@style/layoutAppEnabled"
+            android:id="@+id/layout_app_enabled"
+            >
+
+            <!-- SWITCH BUTTON -->
+            <LinearLayout
+                android:id="@+id/layout_layout_switch_button_enabled"
+                style="@style/layoutLayoutSwitchButton">
+
+                <LinearLayout
+                    android:id="@+id/layout_switch_button_enabled"
+                    style="@style/layoutSwitchButton">
+
+                    <!-- SWITCH BUTTON TEXT ON-->
+                    <LinearLayout
+                        style="@style/switchLayoutText"
+                        android:id="@+id/switch_layout_text_on"
+                        android:clickable="true">
+
+                        <TextView
+                            style="@style/switchTextOn"
+                            android:id="@+id/switch_text_on" />
+                    </LinearLayout>
+
+                    <!-- SWITCH BUTTON ON-->
+                    <LinearLayout
+                        style="@style/switchButtonOn"
+                        android:id="@+id/switch_button_on"
+                        android:clickable="true">
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/layoutHelpButton"
+                android:id="@+id/layout_help_button_enabled">
+
+                <!-- HELP BUTTON RED -->
+                <Button
+                    style="@style/helpButtonOn"
+                    android:id="@+id/help_button_on"/>
+            </LinearLayout>
+        </LinearLayout>
+        <!-- END OFF LAYOUT APP ENABLED -->
+
+        <!-- LAYOUT FIRST TIME -->
+        <LinearLayout
+            style="@style/initialScreenLayoutFirstTime"
+            android:id="@+id/layout_app_first_time"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/text_first_time"
+                style="@style/initialScreenTextFirstTime" />
+
+            <ImageView
+                android:id="@+id/image_first_time"
+                style="@style/initialScreenImageFirstTime"
+                android:contentDescription="purple arrow" />
+        </LinearLayout>
+        <!-- END OF LAYOUT FIRST TIME -->
+    </FrameLayout>
+
+    <!-- BOTTOM BAR -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/bottomBar"
+        android:id="@+id/bottom_bar">
+
+        <include layout="@layout/menu_bottom_bar"/>
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/bottomBar"
+        android:id="@+id/bottom_bar_first_time"
+        android:visibility="gone">
+
+        <include layout="@layout/menu_bottom_bar_first_time"/>
+
+    </LinearLayout>
+    <!-- END BOTTOM BAR -->
+
+</RelativeLayout>

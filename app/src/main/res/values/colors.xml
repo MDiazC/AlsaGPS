@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+   AlsaGPS is a panic button app for Android
+   Copyright (C) 2016 Moisés Díaz
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software Foundation,
+   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+
+ -->
+
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <!-- end of default color -->
+
+    <color name="background_color">#666666</color>
+    <color name="button_color">#CCFF0000</color>
+    <color name="border_button_color">#FFFF00</color>
+    <color name="white_color">#FFFFFF</color>
+    <color name="black_color">#000000</color>
+    <color name="red_color">#FF6666</color>
+    <color name="grey_layout">#99000000</color>
+    <color name="purple_color">#733585</color>
+    <color name="yellow_split_line_color">#B3FFFF33</color>
+    <color name="red_split_line_color">#B3FF6666</color>
+    <color name="green_add_number_color">#33CC00</color>
+    <color name="green_app_on_color">#E633FF33</color>
+    <color name="transparent">#00000000 </color>
+    <color name="grey_button">#C0C0C0 </color>
+    <color name="dark_grey_layout">#DD000000 </color>
+    <color name="help_button_disabled">#FFB13C3C </color>
+    <color name="border_help_button_disabled">#FFACAC00 </color>
+    <color name="white_background">#AAFFFFFF </color>
+</resources>

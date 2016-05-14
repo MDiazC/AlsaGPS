@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+   AlsaGPS is a panic button app for Android
+   Copyright (C) 2016 Moisés Díaz
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software Foundation,
+   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+
+ -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <LinearLayout
+                android:id="@+id/layout_settings"
+                style="@style/layoutSettings">
+
+                <LinearLayout
+                    android:id="@+id/layout_header"
+                    style="@style/layoutHeader">
+
+                <TextView
+                    android:id="@+id/settings_header_text"
+                    style="@style/settingsHeaderText"/>
+
+                    <View
+                        android:id="@+id/settings_bar"
+                        style="@style/headerBarYellow" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layout_body_settings"
+                    style="@style/layoutBodySettings">
+                    <!-- CONTACTS BUTTON -->
+                    <LinearLayout
+                        android:id="@+id/layout_blank_contacts"
+                        style="@style/layoutBlankButton">
+
+
+                        <TextView
+                            android:id="@+id/add_contact_button"
+                            style="@style/blankButton"
+                            android:text="@string/contacts_text"/>
+
+                    </LinearLayout>
+                    <!-- END OF CONTACTS BUTTON -->
+
+                    <!-- MESSAGE BUTTON -->
+                    <LinearLayout
+                        android:id="@+id/layout_blank_message"
+                        style="@style/layoutBlankButton">
+
+                        <TextView
+                            android:id="@+id/message_button"
+                            style="@style/blankButton"
+                            android:text="@string/personal_message_text" />
+                    </LinearLayout>
+                    <!-- END OF MESSAGE BUTTON -->
+
+                    <!-- LOCATION BUTTON -->
+                    <LinearLayout
+                        android:id="@+id/layout_blank_location"
+                        style="@style/layoutBlankButton">
+
+                        <TextView
+                            android:id="@+id/location_button"
+                            style="@style/blankButton"
+                            android:text="@string/location_frequency_text" />
+                    </LinearLayout>
+                    <!-- END OF LOCATION BUTTON -->
+
+                    <!-- TIME WARN BUTTON -->
+                    <!-- android:layout_marginTop="25dp" -->
+                    <LinearLayout
+                        android:id="@+id/layout_blank_time_warn"
+                        style="@style/layoutBlankButton">
+
+                        <TextView
+                            android:id="@+id/time_warn_button"
+                            style="@style/blankButton"
+                            android:text="@string/time_before_warn_text"/>
+                    </LinearLayout>
+                    <!-- END OF TIME WARN BUTTON -->
+
+                </LinearLayout>
+            </LinearLayout>
+            <!-- SETTINGS SCREEN FIRST TIME -->
+            <LinearLayout
+                android:id="@+id/layout_settings_first_time"
+                style="@style/layoutSettingsFirstTime"
+                android:visibility="gone">
+
+                <!-- HIDDEN HEADER AND BAR -->
+                <LinearLayout
+                    android:id="@+id/layout_header_first_time"
+                    style="@style/layoutHeader">
+
+                    <TextView
+                        android:id="@+id/settings_header_text_first_time"
+                        style="@style/settingsHeaderText"
+                        android:visibility="invisible"/>
+
+                    <View
+                        android:id="@+id/settings_bar_first_time"
+                        style="@style/headerBarYellow"
+                        android:visibility="invisible"/>
+                </LinearLayout>
+                <!-- END OF HIDDEN HEADER AND BAR -->
+
+                <!-- CONTACTS BUTTON -->
+                <FrameLayout
+                    android:id="@+id/layou_add_contact_button_firts_time"
+                    style="@style/layoutAddContactButtonFirstTimeSettings">
+                    <TextView
+                        android:id="@+id/add_contact_button_first_time"
+                        style="@style/addContactButtonFirstTime"
+                        android:text="@string/contacts_text"/>
+                <LinearLayout
+                    style="@style/circleAddContactButtonFirstTime"
+                    android:text="@string/contacts_text"
+                    android:id="@+id/circle_add_contact_button_first_time">
+
+                </LinearLayout>
+
+                </FrameLayout>
+
+                <!-- END OF CONTACTS BUTTON -->
+
+                <ImageView
+                    android:id="@+id/settings_arrow_first_time"
+                    style="@style/settingsArrowFirstTime"
+                    android:contentDescription="Purple arrow" />
+
+                <TextView
+                    android:id="@+id/settings_text_first_time"
+                    style="@style/settingsTextFirstTime"/>
+
+
+            </LinearLayout>
+            <!-- END OF SETTINGS SCREEN FIRST TIME -->
+        </FrameLayout>
+
+        <!-- BOTTOM BAR -->
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            style="@style/backBottomBar"
+            android:id="@+id/back_bottom_bar"
+            android:layout_gravity="bottom">
+
+            <include layout="@layout/back_bottom_bar" />
+
+        </LinearLayout>
+
+        <!-- END BOTTOM BAR -->
+    </FrameLayout>
+    <LinearLayout
+        android:id="@+id/layout_options"
+        style="@style/layoutOptions">
+        <LinearLayout
+            android:id="@+id/bottom_layout_options"
+            style="@style/bottomLayoutOptions">
+            <LinearLayout
+                android:id="@+id/layout_location_frequency_input"
+                style="@style/layoutOptionInput">
+
+                <TextView
+                    android:id="@+id/location_frequency_text"
+                    style="@style/optionText"
+                    android:text="@string/location_frequency_input_text"/>
+
+                <LinearLayout
+                    android:id="@+id/background_location_frequency_input"
+                    style="@style/backgroundOptionInput">
+                    <EditText
+                        android:id="@+id/location_frequency_input"
+                        style="@style/optionInput"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout_time_warn_input"
+                style="@style/layoutOptionInput"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/time_warn_text"
+                    style="@style/optionText"
+                    android:text="@string/time_warn_input_text"/>
+
+                <LinearLayout
+                    android:id="@+id/background_time_warn_input"
+                    style="@style/backgroundOptionInput">
+                    <EditText
+                        android:id="@+id/add_contact_input"
+                        style="@style/optionInput"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+            android:id="@+id/layout_options_buttons"
+            style="@style/layoutOptionsButtons">
+
+                <LinearLayout
+                    android:id="@+id/options_button_save"
+                    style="@style/optionsButtonSave">
+
+                    <TextView
+                        android:id="@+id/location_frequency_save_text"
+                        style="@style/blankButton"
+                        android:text="@string/save_text" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/options_button_cancel"
+                    style="@style/optionsButtonCancel">
+
+                    <TextView
+                        android:id="@+id/location_frequency_cancel_text"
+                        style="@style/blankButton"
+                        android:text="@string/cancel_text"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
