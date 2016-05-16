@@ -23,8 +23,10 @@ package com.mdc.elementary.alsagps;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,21 +34,19 @@ import java.util.HashMap;
 public class DBHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "AlsaGPS.db";
-    public String SQL_CREATE_ENTRIES="";
-    public String SQL_DELETE_ENTRIES="";
-
-    public DBHelper(Context context, String query_create_table, String query_delete_table) {
+    public static final String DATABASE_NAME = "AlsaGPS2.db";
+    public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.SQL_CREATE_ENTRIES=query_create_table;
-        this.SQL_DELETE_ENTRIES = query_delete_table;
+
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         //All necessary tables you like to create will create here
-
-        db.execSQL(this.SQL_CREATE_ENTRIES);
+        db.execSQL(ContactList.getCreateTable());
+        db.execSQL(InternalParams.getCreateTable());
+        db.execSQL(StartingPoints.getCreateTable());
+        Log.e("CREATION", "New tabla");
 
         /*
         try {
@@ -60,7 +60,9 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed, all data will be gone!!!
-        db.execSQL(this.SQL_DELETE_ENTRIES);
+        db.execSQL(ContactList.getDeleteTable());
+        db.execSQL(InternalParams.getDeleteTable());
+        db.execSQL(StartingPoints.getDeleteTable());
 
         // Create tables again
         onCreate(db);
@@ -129,11 +131,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 Student.KEY_age +
                 " FROM " + Student.TABLE; */
 
-        //Student student = new Student();
-        ArrayList<HashMap<String, String>> studentList = new ArrayList<HashMap<String, String>>();
-
         Cursor cursor = db.rawQuery(selectQuery, null);
-        // looping through all rows and adding to list
+
 
         if (cursor.moveToFirst()) {
             do {
@@ -148,7 +147,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         cursor.close();
         db.close();
-        return studentList;
+        return new ArrayList<>();
         //@todo exceptions
 
     }

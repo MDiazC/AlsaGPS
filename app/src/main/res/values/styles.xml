@@ -146,6 +146,13 @@
         <item name="android:orientation">vertical</item>
     </style>
 
+    <style name="addContactInput">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:ems">10</item>
+    </style>
+
     <!-- +++++++++++++++ END OF GENERIC STYLE +++++++++++++++++++ -->
     <!-- +++++++++++++++ LOADING SCREEN +++++++++++++++++++ -->
 
@@ -505,10 +512,13 @@
         <item name="android:background">@color/white_color</item>
         <item name="android:layout_marginRight">20dp</item>
         <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
     <style name="optionInput" parent="addContactInput">
         <item name="android:layout_marginTop">-1dp</item>
+        <item name="android:inputType">number</item>
     </style>
 
 
@@ -518,6 +528,7 @@
         <item name="android:weightSum">2</item>
         <item name="android:background">@color/transparent</item>
         <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
     </style>
 
     <style name="optionsButtonSave" parent="layoutBlankButton">
@@ -666,26 +677,43 @@
         <item name="android:layout_marginEnd">10dp</item>
     </style>
 
-    <style name="addContactInput">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:inputType">phone</item>
-        <item name="android:ems">10</item>
+    <style name="addContactInputName" parent="addContactInput">
+        <item name="android:inputType">text</item>
     </style>
 
-    <style name="buttonSaveContact" parent="blankButton">
-        <item name="android:text">@string/save_text</item>
+    <style name="addContactInputNumber"  parent="addContactInput">
+        <item name="android:inputType">number</item>
+    </style>
+
+    <style name="buttonAddContactManually" parent="blankButton">
+        <item name="android:text">@string/add_contact_manually</item>
     </style>
 
 
     <style name="backgroundAddContactInput" parent="blankButton">
         <item name="android:background">@color/white_color</item>
-        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">250dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">20dp</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
+
+    <style name="layoutLayoutAddContactBottom">
+        <item name="android:background">@color/grey_layout</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="layoutAddContactBottom">
+        <item name="android:background">@color/black_color</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+    </style>
 
 
     <!-- +++++++++++++++ END OF ADD CONTACT SCREEN +++++++++++++++++++ -->
@@ -699,10 +727,12 @@
 
     <style name="layoutListPersonalMessage" parent="layoutBlankButton">
         <item name="android:gravity">top</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:layout_height">225dp</item>
+        <item name="android:paddingTop">1dp</item>
         <item name="android:orientation">vertical</item>
         <item name="android:layout_width">300dp</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
     </style>
 
     <style name="buttonSavePersonalMessage" parent="blankButton">
@@ -716,14 +746,20 @@
         <item name="android:textSize">20dp</item>
         <item name="android:maxLength">50</item>
         <item name="android:hint">@string/type_personal_message_text</item>
+        <item name="android:inputType">textMultiLine</item>
     </style>
 
     <style name="layoutBodyPersonalMessage" parent="layoutBody">
         <item name="android:gravity">center</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="layoutSaveButtonPersonalMessage" parent="layoutBlankButton">
         <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="layoutPersonalMessage" parent="layoutInternalScreen">
+        <item name="android:gravity">center_horizontal</item>
     </style>
 
     <!-- +++++++++++++++ END OF PERSONAL MESSAGE SCREEN +++++++++++++++++++ -->
@@ -807,6 +843,8 @@
 
     <style name="currentPositionName" parent="addContactInput">
         <item name="android:hint">@string/name_current_position_text</item>
+        <item name="android:inputType">text</item>
+
     </style>
 
 

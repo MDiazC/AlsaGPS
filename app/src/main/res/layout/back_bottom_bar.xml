@@ -31,7 +31,8 @@
         <!-- SETTINGS -->
         <LinearLayout
             style="@style/layoutBackBottomBar"
-            android:clickable="true">
+            android:clickable="true"
+            android:id="@+id/bottom_bar_back">
             <ImageView
                 style="@style/backImage"
                 />
@@ -46,7 +47,8 @@
         <!-- ABOUT -->
         <LinearLayout
             style="@style/layoutInnerBottomBar"
-            android:clickable="true">
+            android:clickable="true"
+            android:id="@+id/bottom_bar_about">
             <TextView
                 android:id="@+id/interrogation_text"
                 style="@style/aboutInterrogation"/>

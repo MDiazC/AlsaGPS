@@ -44,6 +44,7 @@
     <string name="add_contacts_list_text">Add contacts to the list</string>
     <string name="save_text">Save</string>
     <string name="type_number_text">Type number here</string>
+    <string name="type_name_text">Type name here</string>
     <string name="location_frequency_input_text">Type location frequency (in minutes)</string>
     <string name="time_warn_input_text">Time to warn (in hours)</string>
     <string name="cancel_text">Cancel</string>
@@ -56,4 +57,5 @@
     <string name="contact_info_text">Contact details: \n always_safe_gps@gmail.com \n @alwayssafegps</string>
     <string name="market_text">If you are satisfied with the app \n please give us a good review \n in the play store</string>
     <string name="developer_text">AlwaysSafeGPS was developed \n by Moises Diaz</string>
+    <string name="add_contact_manually">Add contact manually</string>
 </resources>

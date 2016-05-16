@@ -21,7 +21,10 @@ package com.mdc.elementary.alsagps;
 */
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 
 public class AboutScreenActivity extends Activity{
 
@@ -30,5 +33,23 @@ public class AboutScreenActivity extends Activity{
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.about_screen);
+
+        LinearLayout lyt_back_button = (LinearLayout) findViewById(R.id.bottom_bar_back);
+        lyt_back_button.setOnClickListener(initialScreenHandler);
+
+        LinearLayout lyt_about = (LinearLayout) findViewById(R.id.bottom_bar_about);
+        lyt_about.setVisibility(View.GONE);
     }
+
+    View.OnClickListener initialScreenHandler = new View.OnClickListener(){
+
+        public void onClick(View v) {
+
+            switch(v.getId()) {
+                case R.id.bottom_bar_back:
+                    onBackPressed();
+                    break;
+            }
+        }
+    };
 }

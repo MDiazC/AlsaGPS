@@ -31,7 +31,7 @@
 
         <LinearLayout
             android:id="@+id/layout_personal_message"
-            style="@style/layoutInternalScreen">
+            style="@style/layoutPersonalMessage">
 
             <LinearLayout
                 android:id="@+id/layout_header"
@@ -75,7 +75,7 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/backBottomBar"
         android:id="@+id/back_bottom_bar"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom" android:visibility="visible">
 
         <include layout="@layout/back_bottom_bar" />
 

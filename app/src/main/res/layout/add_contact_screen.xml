@@ -72,6 +72,7 @@
 
                         <Button
                             style="@style/addButton"
+                            android:id="@+id/add_contact_green"
                             android:clickable="true"/>
 
                     </RelativeLayout>
@@ -91,27 +92,20 @@
                 </LinearLayout>
 
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"></LinearLayout>
                 <View
                     android:id="@+id/settings_bar"
                     style="@style/headerBarRed" />
 
                 <LinearLayout
-                    android:id="@+id/layout_input_number"
-                    style="@style/backgroundAddContactInput">
-                    <EditText
-                        android:id="@+id/add_contact_input"
-                        style="@style/addContactInput"
-                        android:hint="@string/type_number_text"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/layout_add_contact_button"
+                    android:id="@+id/button_add_contact_manually"
                     style="@style/layoutBlankButton">
 
                     <TextView
                         android:id="@+id/message_button"
-                        style="@style/buttonSaveContact" />
+                        style="@style/buttonAddContactManually" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -125,6 +119,65 @@
         android:layout_gravity="bottom">
 
         <include layout="@layout/back_bottom_bar" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/layoutLayoutAddContactBottom"
+        android:id="@+id/layout_layout_add_contact_bottom"
+        android:visibility="gone">
+
+        <LinearLayout
+            style="@style/layoutAddContactBottom"
+            android:id="@+id/layout_add_contact_bottom">
+
+            <LinearLayout
+                style="@style/backgroundAddContactInput"
+                android:id="@+id/backgroundAddContactInput">
+
+                <EditText
+                    style="@style/addContactInputName"
+                    android:id="@+id/layout_input_name"
+                    android:hint="@string/type_name_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_input_number"
+                style="@style/backgroundAddContactInput">
+                <EditText
+                    android:id="@+id/add_contact_input"
+                    style="@style/addContactInputNumber"
+                    android:hint="@string/type_number_text"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_options_buttons"
+                style="@style/layoutOptionsButtons"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:id="@+id/options_button_save"
+                    style="@style/optionsButtonSave">
+
+                    <TextView
+                        android:id="@+id/location_frequency_save_text"
+                        style="@style/blankButton"
+                        android:text="@string/save_text" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/options_button_cancel"
+                    style="@style/optionsButtonCancel">
+
+                    <TextView
+                        android:id="@+id/location_frequency_cancel_text"
+                        style="@style/blankButton"
+                        android:text="@string/cancel_text"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 

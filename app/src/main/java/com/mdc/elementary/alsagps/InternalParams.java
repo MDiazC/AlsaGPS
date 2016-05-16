@@ -25,6 +25,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
@@ -34,14 +35,12 @@ public class InternalParams{
     private Integer frequency = 0;
     private String message = null;
 
-    private final String PARAMS_TABLE_NAME = "internal_params";
-    private final String PARAMS_COLUMN_ID = "id";
-    private final String PARAMS_COLUMN_PERSONAL_MESSAGE = "personal_message";
-    private final String PARAMS_COLUMN_LOCATION_FREQUENCY = "location_frequency";
-    private final String PARAMS_COLUMN_TIME_WARN = "time_warn";
+    private final static String PARAMS_TABLE_NAME = "internal_params";
+    private final static String PARAMS_COLUMN_ID = "id";
+    private final static String PARAMS_COLUMN_PERSONAL_MESSAGE = "personal_message";
+    private final static String PARAMS_COLUMN_LOCATION_FREQUENCY = "location_frequency";
+    private final static String PARAMS_COLUMN_TIME_WARN = "time_warn";
     private Context context = null;
-    private String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + PARAMS_TABLE_NAME + "("+PARAMS_COLUMN_ID+
-            " INTEGER PRIMARY KEY, "+PARAMS_COLUMN_PERSONAL_MESSAGE+" TEXT, "+PARAMS_COLUMN_LOCATION_FREQUENCY+" INTEGER, "+PARAMS_COLUMN_TIME_WARN+" INTEGER)";
     private String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS "+ PARAMS_TABLE_NAME;
 
     public InternalParams(Context context){
@@ -49,6 +48,15 @@ public class InternalParams{
         frequency = 10;
         message = "";
         this.context=context;
+    }
+
+    public static String getCreateTable(){
+        return "CREATE TABLE IF NOT EXISTS " + PARAMS_TABLE_NAME + "("+PARAMS_COLUMN_ID+
+                " INTEGER PRIMARY KEY, "+PARAMS_COLUMN_PERSONAL_MESSAGE+" TEXT, "+PARAMS_COLUMN_LOCATION_FREQUENCY+" INTEGER, "+PARAMS_COLUMN_TIME_WARN+" INTEGER)";
+    }
+
+    public static String getDeleteTable(){
+        return "DROP TABLE IF EXISTS "+ PARAMS_TABLE_NAME;
     }
 
     public Integer getTimeWarn(){
@@ -87,16 +95,20 @@ public class InternalParams{
         }
     }
 
-    public ArrayList loadParams(){
-        DBHelper db = new DBHelper(this.context, this.SQL_CREATE_TABLE, this.SQL_DELETE_TABLE);
-        String selectQuery =  "SELECT  * FROM " + this.PARAMS_TABLE_NAME;
-        ArrayList array_list =db.get(selectQuery);
-        return array_list;
+    public void loadParams(){
+        DBHelper db = new DBHelper(this.context);
+        String selectQuery =  "SELECT  * FROM  " + this.PARAMS_TABLE_NAME;
+        try {
+            ArrayList array_list = db.get(selectQuery);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
     }
 
     private boolean updateParams ()
     {
-        DBHelper db = new DBHelper(this.context, this.SQL_CREATE_TABLE, this.SQL_DELETE_TABLE);
+        DBHelper db = new DBHelper(this.context);
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(PARAMS_COLUMN_LOCATION_FREQUENCY, this.frequency);
@@ -106,5 +118,6 @@ public class InternalParams{
         db.update(PARAMS_TABLE_NAME, contentValues, "id = ? ", new String[] { "1" } );
         return true;
     }
+
 }
 

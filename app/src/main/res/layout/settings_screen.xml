@@ -34,7 +34,8 @@
 
             <LinearLayout
                 android:id="@+id/layout_settings"
-                style="@style/layoutSettings">
+                style="@style/layoutSettings"
+                android:visibility="visible">
 
                 <LinearLayout
                     android:id="@+id/layout_header"
@@ -175,13 +176,16 @@
     </FrameLayout>
     <LinearLayout
         android:id="@+id/layout_options"
-        style="@style/layoutOptions">
+        style="@style/layoutOptions"
+        android:visibility="visible">
         <LinearLayout
             android:id="@+id/bottom_layout_options"
-            style="@style/bottomLayoutOptions">
+            style="@style/bottomLayoutOptions"
+            android:visibility="visible">
             <LinearLayout
                 android:id="@+id/layout_location_frequency_input"
-                style="@style/layoutOptionInput">
+                style="@style/layoutOptionInput"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/location_frequency_text"
@@ -200,8 +204,7 @@
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/layout_time_warn_input"
-                style="@style/layoutOptionInput"
-                android:visibility="gone">
+                style="@style/layoutOptionInput">
 
                 <TextView
                     android:id="@+id/time_warn_text"
@@ -212,7 +215,7 @@
                     android:id="@+id/background_time_warn_input"
                     style="@style/backgroundOptionInput">
                     <EditText
-                        android:id="@+id/add_contact_input"
+                        android:id="@+id/input_time_warn"
                         style="@style/optionInput"/>
 
                 </LinearLayout>

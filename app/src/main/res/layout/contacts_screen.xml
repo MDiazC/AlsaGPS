@@ -83,6 +83,7 @@
 
                         <Button
                             style="@style/removeButton"
+                            android:id="@+id/remove_button"
                             android:clickable="true"/>
 
                     </RelativeLayout>
@@ -102,7 +103,8 @@
         </LinearLayout>
         <LinearLayout
             android:id="@+id/layout_contacts_first_time"
-            style="@style/layoutListContactFirstTime">
+            style="@style/layoutListContactFirstTime"
+            android:visibility="gone">
 
             <LinearLayout
                 style="@style/layoutHeader"
@@ -116,7 +118,8 @@
 
             <LinearLayout
                 android:id="@+id/layout_body_contacts_first_time"
-                style="@style/layoutBodyContactsFirstTime">
+                style="@style/layoutBodyContactsFirstTime"
+                >
 
                 <LinearLayout
                     android:id="@+id/layout_blank_contacts_first_time"
@@ -137,7 +140,7 @@
                     style="@style/layoutAddContactButtonFirstTimeContacts">
 
                     <TextView
-                        android:id="@+id/message_button_first_time"
+                        android:id="@+id/add_contact_button_first_time"
                         style="@style/buttonAddContactFirstTime"/>
 
                     <LinearLayout

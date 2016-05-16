@@ -30,8 +30,8 @@
         <!-- LAYOUT APP DISABLED -->
         <LinearLayout
             android:orientation="vertical"
-            style="@style/layoutAppDisabled">
-
+            style="@style/layoutAppDisabled"
+            android:id="@+id/layout_app_disabled">
 
             <!-- SWITCH BUTTON -->
             <LinearLayout
@@ -40,20 +40,19 @@
 
                 <LinearLayout
                     android:id="@+id/layout_switch_button"
-                    style="@style/layoutSwitchButton">
+                    style="@style/layoutSwitchButton"
+                    android:clickable="true">
 
                     <!-- SWITCH BUTTON OFF-->
                     <LinearLayout
                         style="@style/switchButton"
-                        android:id="@+id/switch_button"
-                        android:clickable="true">
+                        android:id="@+id/switch_button">
                     </LinearLayout>
 
                     <!-- SWITCH BUTTON TEXT OFF-->
                     <LinearLayout
                         style="@style/switchLayoutText"
-                        android:id="@+id/switch_layout_text"
-                        android:clickable="true">
+                        android:id="@+id/switch_layout_text">
 
                         <TextView
                             style="@style/switchText"
@@ -78,8 +77,7 @@
         <!-- LAYOUT APP ENABLED -->
         <LinearLayout
             style="@style/layoutAppEnabled"
-            android:id="@+id/layout_app_enabled"
-            >
+            android:id="@+id/layout_app_enabled">
 
             <!-- SWITCH BUTTON -->
             <LinearLayout
@@ -88,13 +86,13 @@
 
                 <LinearLayout
                     android:id="@+id/layout_switch_button_enabled"
-                    style="@style/layoutSwitchButton">
+                    style="@style/layoutSwitchButton"
+                    android:clickable="true">
 
                     <!-- SWITCH BUTTON TEXT ON-->
                     <LinearLayout
                         style="@style/switchLayoutText"
-                        android:id="@+id/switch_layout_text_on"
-                        android:clickable="true">
+                        android:id="@+id/switch_layout_text_on">
 
                         <TextView
                             style="@style/switchTextOn"
@@ -104,8 +102,7 @@
                     <!-- SWITCH BUTTON ON-->
                     <LinearLayout
                         style="@style/switchButtonOn"
-                        android:id="@+id/switch_button_on"
-                        android:clickable="true">
+                        android:id="@+id/switch_button_on">
                     </LinearLayout>
 
                 </LinearLayout>

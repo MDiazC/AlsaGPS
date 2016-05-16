@@ -38,13 +38,18 @@ public class ContactList{
     private static final String CONTACTS_COLUMN_NAME = "name";
     private static final String CONTACTS_COLUMN_PHONE = "phone";
     private Context context = null;
-    private String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + CONTACTS_TABLE_NAME + "("+CONTACTS_COLUMN_ID+
-            " INTEGER PRIMARY KEY, "+CONTACTS_COLUMN_NAME+" TEXT,"+CONTACTS_COLUMN_PHONE+" INTEGER)";
-    private String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS "+ CONTACTS_TABLE_NAME;
 
     public ContactList(Context context){
-        contacts_list = new ArrayList<>();
+        this.contacts_list = new ArrayList<>();
         this.context=context;
+    }
+
+    public static String getCreateTable(){
+        return "CREATE TABLE IF NOT EXISTS " + CONTACTS_TABLE_NAME + "("+CONTACTS_COLUMN_ID+
+                " INTEGER PRIMARY KEY, "+CONTACTS_COLUMN_NAME+" TEXT,"+CONTACTS_COLUMN_PHONE+" INTEGER)";
+    }
+    public static String getDeleteTable(){
+        return "DROP TABLE IF EXISTS "+ CONTACTS_TABLE_NAME;
     }
 
     public Boolean isContactListEmpty(){
@@ -58,7 +63,7 @@ public class ContactList{
         contentValues.put(CONTACTS_COLUMN_NAME, name);
         contentValues.put(CONTACTS_COLUMN_PHONE, phone);
 
-        DBHelper db = new DBHelper(this.context, this.SQL_CREATE_TABLE, this.SQL_DELETE_TABLE);
+        DBHelper db = new DBHelper(this.context);
         int id =db.insert(this.CONTACTS_TABLE_NAME, contentValues);
         return id;
     }
@@ -66,7 +71,7 @@ public class ContactList{
 
     public void deleteContact (int id)
     {
-        DBHelper db = new DBHelper(this.context, this.SQL_CREATE_TABLE, this.SQL_DELETE_TABLE);
+        DBHelper db = new DBHelper(this.context);
         String whereClause=" WHERE id = ?";
         String[] whereArgs = new String[] { String.valueOf(id) };
         db.delete(this.CONTACTS_TABLE_NAME, whereClause, whereArgs);
@@ -80,11 +85,11 @@ public class ContactList{
 
     public ArrayList getAllContacts()
     {
-        Log.d("CREATION", "get all contacts");
+        Log.e("CREATION", "get all contacts");
         if(isContactListEmpty()){
             this.loadAllContacts();
         }
-        Log.d("CREATION", "end get all contacts");
+        Log.e("CREATION", "end get all contacts");
         return this.contacts_list;
     }
 
@@ -92,7 +97,7 @@ public class ContactList{
     public void loadAllContacts()
     {
         //hp = new HashMap();
-        DBHelper db = new DBHelper(this.context, this.SQL_CREATE_TABLE, this.SQL_DELETE_TABLE);
+        DBHelper db = new DBHelper(this.context);
         String selectQuery =  "SELECT  * FROM " + this.CONTACTS_TABLE_NAME;
         this.contacts_list =db.get(selectQuery);
         //SQLiteDatabase db = this.getReadableDatabase();

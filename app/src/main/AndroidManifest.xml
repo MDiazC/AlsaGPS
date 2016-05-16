@@ -28,7 +28,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,12 +36,12 @@
             </intent-filter>
         </activity>
         <activity android:name="AboutScreenActivity" ></activity>
-        <activity android:name="AddContactActivity" ></activity>
+        <activity android:name="AddContactActivity" android:windowSoftInputMode="adjustResize"></activity>
         <activity android:name="ContactsScreenActivity" ></activity>
         <activity android:name="InitialScreenActivity" ></activity>
-        <activity android:name="PersonalMessageActivity" ></activity>
-        <activity android:name="SettingsScreenActivity" ></activity>
-        <activity android:name="StartingPointActivity" ></activity>
+        <activity android:name="PersonalMessageActivity" android:windowSoftInputMode="adjustResize"></activity>
+        <activity android:name="SettingsScreenActivity" android:windowSoftInputMode="adjustResize" ></activity>
+        <activity android:name="StartingPointActivity" android:windowSoftInputMode="adjustResize"></activity>
     </application>
 
 </manifest>
