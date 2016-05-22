@@ -77,7 +77,8 @@
         <!-- LAYOUT APP ENABLED -->
         <LinearLayout
             style="@style/layoutAppEnabled"
-            android:id="@+id/layout_app_enabled">
+            android:id="@+id/layout_app_enabled"
+            android:visibility="gone">
 
             <!-- SWITCH BUTTON -->
             <LinearLayout

@@ -55,39 +55,12 @@
                     style="@style/layoutListContacts">
 
                     <ListView
-                        android:layout_width="match_parent"
+                        android:layout_width="250dp"
+                        android:background="@color/transparent"
                         android:layout_height="match_parent"
-                        android:id="@+id/listView"
+                        android:id="@+id/list_view_contacts"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1" />
-
-                    <RelativeLayout
-                        style="@style/layoutContact">
-
-                        <TextView
-                            style="@style/contactName"
-                            android:text="Pepe"/>
-
-                        <Button
-                            style="@style/removeButton"
-                            android:clickable="true"/>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        style="@style/layoutContact">
-
-                        <TextView
-                            style="@style/contactName"
-                            android:text="Pepe"/>
-
-                        <Button
-                            style="@style/removeButton"
-                            android:id="@+id/remove_button"
-                            android:clickable="true"/>
-
-                    </RelativeLayout>
-
 
                 </LinearLayout>
                 <LinearLayout

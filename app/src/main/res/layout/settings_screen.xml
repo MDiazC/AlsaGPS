@@ -110,7 +110,7 @@
             <LinearLayout
                 android:id="@+id/layout_settings_first_time"
                 style="@style/layoutSettingsFirstTime"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <!-- HIDDEN HEADER AND BAR -->
                 <LinearLayout
@@ -131,11 +131,12 @@
 
                 <!-- CONTACTS BUTTON -->
                 <FrameLayout
-                    android:id="@+id/layou_add_contact_button_firts_time"
+                    android:id="@+id/layout_add_contact_button_firts_time"
                     style="@style/layoutAddContactButtonFirstTimeSettings">
                     <TextView
                         android:id="@+id/add_contact_button_first_time"
                         style="@style/addContactButtonFirstTime"
+                        android:clickable="true"
                         android:text="@string/contacts_text"/>
                 <LinearLayout
                     style="@style/circleAddContactButtonFirstTime"
@@ -177,11 +178,10 @@
     <LinearLayout
         android:id="@+id/layout_options"
         style="@style/layoutOptions"
-        android:visibility="visible">
+        android:visibility="gone">
         <LinearLayout
             android:id="@+id/bottom_layout_options"
-            style="@style/bottomLayoutOptions"
-            android:visibility="visible">
+            style="@style/bottomLayoutOptions">
             <LinearLayout
                 android:id="@+id/layout_location_frequency_input"
                 style="@style/layoutOptionInput"

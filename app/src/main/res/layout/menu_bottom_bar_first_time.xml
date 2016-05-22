@@ -77,7 +77,7 @@
         <!-- SETTINGS -->
         <LinearLayout
             style="@style/layoutInnerBottomBar"
-            android:id="@+id/bottom_bar_settings"
+            android:id="@+id/bottom_bar_settings_ft"
             android:clickable="true">
             <ImageView
                 style="@style/settingsImage"

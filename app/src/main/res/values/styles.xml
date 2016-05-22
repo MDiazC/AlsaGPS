@@ -476,6 +476,8 @@
         <item name="android:gravity">bottom</item>
         <item name="android:orientation">vertical</item>
         <item name="android:background">@color/grey_layout</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
     </style>
 
     <style name="bottomLayoutOptions">
@@ -527,20 +529,20 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:weightSum">2</item>
         <item name="android:background">@color/transparent</item>
-        <item name="android:layout_marginTop">10dp</item>
-        <item name="android:layout_marginBottom">20dp</item>
     </style>
 
     <style name="optionsButtonSave" parent="layoutBlankButton">
         <item name="android:layout_weight">1</item>
         <item name="android:layout_marginRight">40dp</item>
         <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_gravity">left</item>
     </style>
 
     <style name="optionsButtonCancel" parent="layoutBlankButton">
         <item name="android:layout_weight">1</item>
         <item name="android:layout_marginRight">20dp</item>
         <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:layout_gravity">left</item>
     </style>
 
 
@@ -656,6 +658,7 @@
         <item name="android:layout_height">150dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:paddingTop">0dp</item>
     </style>
 
     <style name="headerBarRed">
@@ -694,7 +697,7 @@
         <item name="android:background">@color/white_color</item>
         <item name="android:layout_width">250dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
         <item name="android:focusableInTouchMode">true</item>
         <item name="android:focusable">true</item>
     </style>
@@ -704,6 +707,8 @@
         <item name="android:background">@color/grey_layout</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:clickable">true</item>
     </style>
 
     <style name="layoutAddContactBottom">
@@ -713,8 +718,16 @@
         <item name="android:layout_gravity">bottom</item>
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
+        <item name="android:paddingTop">20dp</item>
     </style>
 
+    <style name="listViewContacts">
+        <item name="android:layout_width">250dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
 
     <!-- +++++++++++++++ END OF ADD CONTACT SCREEN +++++++++++++++++++ -->
 
@@ -730,6 +743,7 @@
         <item name="android:paddingTop">1dp</item>
         <item name="android:orientation">vertical</item>
         <item name="android:layout_width">300dp</item>
+        <item name="android:layout_height">150dp</item>
         <item name="android:focusableInTouchMode">true</item>
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
@@ -742,7 +756,7 @@
 
     <style name="personalMessageText">
         <item name="android:layout_width">300dp</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:textSize">20dp</item>
         <item name="android:maxLength">50</item>
         <item name="android:hint">@string/type_personal_message_text</item>
@@ -752,6 +766,9 @@
     <style name="layoutBodyPersonalMessage" parent="layoutBody">
         <item name="android:gravity">center</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
     </style>
 
     <style name="layoutSaveButtonPersonalMessage" parent="layoutBlankButton">
@@ -760,15 +777,27 @@
 
     <style name="layoutPersonalMessage" parent="layoutInternalScreen">
         <item name="android:gravity">center_horizontal</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
     </style>
 
     <!-- +++++++++++++++ END OF PERSONAL MESSAGE SCREEN +++++++++++++++++++ -->
 
     <!-- +++++++++++++++ STARTING POINT SCREEN +++++++++++++++++++ -->
 
+    <style name="layoutStartingPoint" parent="layoutInternalScreen">
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
     <style name="bodyStartingPoint" parent="layoutBody">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:gravity">center</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
     </style>
 
     <style name="startingPointHeaderText" parent="headerText">
@@ -831,6 +860,8 @@
         <item name="android:layout_width">270dp</item>
         <item name="android:layout_marginTop">20dp</item>
         <item name="android:background">@color/white_color</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
     <style name="buttonSaveCurrentPosition" parent="blankButton">
@@ -839,6 +870,7 @@
 
     <style name="currentPositionButton" parent="layoutBlankButton">
         <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_marginBottom">20dp</item>
     </style>
 
     <style name="currentPositionName" parent="addContactInput">
@@ -884,6 +916,31 @@
 
     <!-- +++++++++++++++ END OF ABOUT SCREEN +++++++++++++++++++ -->
 
+    <!-- +++++++++++++++ LIST CONTACTS SCREEN +++++++++++++++++++ -->
+    <style name="layoutButtonListContacts">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">right</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="layoutContactList">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_marginTop">7dp</item>
+    </style>
+
+
+    <style name="layoutLayoutContactList">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:descendantFocusability">blocksDescendants</item>
+    </style>
+
+    <!-- +++++++++++++++ END OF LIST CONTACTS SCREEN +++++++++++++++++++ -->
 
 <!-- +++++++++++++++ INITIAL SCREEN +++++++++++++++++++ -->
 <!-- +++++++++++++++ END OF INITIAL SCREEN +++++++++++++++++++ -->

@@ -24,13 +24,15 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class StartingPoints extends Activity {
 
-    private ArrayList starting_points_list = null;
+    private HashMap<String, ArrayList> starting_points_list = null;
     private Context context = null;
     private final static String SP_TABLE_NAME = "starting_points";
     private final static String SP_COLUMN_ID = "id";
@@ -39,7 +41,7 @@ public class StartingPoints extends Activity {
     private final static String SP_COLUMN_LONGITUDE = "longitude";
 
     public StartingPoints(Context context){
-        starting_points_list = new ArrayList<>();
+        starting_points_list = new HashMap<String,  ArrayList>();
         this.context = context;
     }
 
@@ -51,14 +53,31 @@ public class StartingPoints extends Activity {
         return "DROP TABLE IF EXISTS "+ SP_TABLE_NAME;
     }
 
-    public ArrayList getStartingPoints(){
+    public HashMap<String, ArrayList> getStartingPoints(){
         return this.starting_points_list;
     }
 
     public void loadStartingPoints(){
-        DBHelper db = new DBHelper(this.context);
-        String selectQuery =  "SELECT  * FROM " + this.SP_TABLE_NAME;
-        ArrayList array_list =db.get(selectQuery);
+        DBHelper dbh = new DBHelper(this.context);
+        String selectQuery =  "SELECT  * FROM " + SP_TABLE_NAME;
+        this.starting_points_list = new HashMap<String, ArrayList>();
+
+        try{
+            SQLiteDatabase db =dbh.get(selectQuery);
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    ArrayList aux_array = new ArrayList();
+                    aux_array.add(cursor.getString(cursor.getColumnIndex(SP_COLUMN_LATITUDE)));
+                    aux_array.add(cursor.getString(cursor.getColumnIndex(SP_COLUMN_LONGITUDE)));
+                    this.starting_points_list.put(cursor.getString(cursor.getColumnIndex(SP_COLUMN_NAME)), aux_array);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     public int insertStartingPoint(String name, Float latitude, Float longitude){

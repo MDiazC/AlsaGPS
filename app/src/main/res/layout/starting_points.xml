@@ -31,7 +31,7 @@
 
         <LinearLayout
             android:id="@+id/layout_starting_point"
-            style="@style/layoutInternalScreen">
+            style="@style/layoutStartingPoint">
 
             <LinearLayout
                 android:id="@+id/layout_header"
@@ -49,50 +49,6 @@
             <LinearLayout
                 android:id="@+id/layout_body_starting_point"
                 style="@style/bodyStartingPoint">
-
-                <LinearLayout
-                    android:id="@+id/layout_blank_starting_point"
-                    style="@style/layoutListContactsPhonebook">
-
-                    <ListView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/listView"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1" />
-
-
-                    <RelativeLayout
-                        style="@style/layoutContact">
-
-                        <TextView
-                            style="@style/contactName"
-                            android:text="Pepe"/>
-
-                        <Button
-                            style="@style/addButton"
-                            android:clickable="true"/>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        style="@style/layoutContact">
-
-                        <TextView
-                            style="@style/contactName"
-                            android:text="Pepe"/>
-
-                        <Button
-                            style="@style/addButton"
-                            android:clickable="true"/>
-
-                    </RelativeLayout>
-                </LinearLayout>
-
-
-                <View
-                    android:id="@+id/settings_bar"
-                    style="@style/headerBarRed" />
 
                 <LinearLayout
                     android:id="@+id/layout_current_position"
@@ -154,6 +110,50 @@
                         style="@style/buttonSaveCurrentPosition"/>
                 </LinearLayout>
 
+                <View
+                    android:id="@+id/settings_bar"
+                    style="@style/headerBarRed" />
+
+                <LinearLayout
+                    android:id="@+id/layout_blank_starting_point"
+                    style="@style/layoutListContactsPhonebook">
+
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/listView"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1" />
+
+
+                    <RelativeLayout
+                        style="@style/layoutContact">
+
+                        <TextView
+                            style="@style/contactName"
+                            android:text="Pepe"/>
+
+                        <Button
+                            style="@style/addButton"
+                            android:id="@+id/remove_button"
+                            android:clickable="true"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        style="@style/layoutContact">
+
+                        <TextView
+                            style="@style/contactName"
+                            android:text="Pepe"/>
+
+                        <Button
+                            style="@style/addButton"
+                            android:clickable="true"/>
+
+                    </RelativeLayout>
+                </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>
@@ -167,7 +167,6 @@
         <include layout="@layout/back_bottom_bar" />
 
     </LinearLayout>
-
     <!-- END BOTTOM BAR -->
 
 </RelativeLayout>

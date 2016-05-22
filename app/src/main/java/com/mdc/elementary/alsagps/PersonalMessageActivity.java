@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -43,10 +44,10 @@ public class PersonalMessageActivity extends Activity{
         this.internal_params.loadParams();
         setContentView(R.layout.personal_message);
 
-        this.activateBottomBar();
+        this.activateAllFeatures();
     }
 
-    private void activateBottomBar(){
+    private void activateAllFeatures(){
         LinearLayout lyt_back_button = (LinearLayout) findViewById(R.id.bottom_bar_back);
         LinearLayout lyt_about = (LinearLayout) findViewById(R.id.bottom_bar_about);
         LinearLayout btn_save = (LinearLayout) findViewById(R.id.layout_save_button);
@@ -54,11 +55,32 @@ public class PersonalMessageActivity extends Activity{
         lyt_back_button.setOnClickListener(initialScreenHandler);
         lyt_about.setOnClickListener(initialScreenHandler);
         btn_save.setOnClickListener(initialScreenHandler);
+
+        LinearLayout layout_root = (LinearLayout) findViewById(R.id.layout_personal_message);
+        LinearLayout layout_body = (LinearLayout) findViewById(R.id.layout_body_personal_message);
+        layout_root.setOnFocusChangeListener(focusChangeListener);
+        layout_body.setOnFocusChangeListener(focusChangeListener);
+    }
+
+
+
+    public void hideKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
     private void saveMessage(){
 
     }
+
+    View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus) {
+                hideKeyboard(v);
+            }
+        }
+    };
 
     View.OnClickListener initialScreenHandler = new View.OnClickListener(){
 
@@ -75,8 +97,8 @@ public class PersonalMessageActivity extends Activity{
                     break;
                 case R.id.layout_save_button:
                     saveMessage();
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    hideKeyboard(v);
+                    v.clearFocus();
                     break;
             }
         }

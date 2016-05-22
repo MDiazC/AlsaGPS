@@ -31,6 +31,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -49,15 +50,16 @@ public class SettingsScreenActivity extends Activity {
         setContentView(R.layout.settings_screen);
 
         this.contact_list= new ContactList(this);
-        Boolean conctac_list_empty= this.contact_list.isContactListEmpty();
+        this.contact_list.loadAllContacts();
+        Boolean contact_list_empty= this.contact_list.isContactListEmpty();
 
         this.internal_params = new InternalParams(this);
         this.internal_params.loadParams();
 
-        this.visibilityFirstTimeLayout(conctac_list_empty);
+        this.visibilityFirstTimeLayout(contact_list_empty);
         this.activateBottomBar();
 
-        if(conctac_list_empty) {
+        if(!contact_list_empty) {
             this.activateAllFeatures();
         }
     }
@@ -71,11 +73,14 @@ public class SettingsScreenActivity extends Activity {
         lyt_settings.setVisibility(View.VISIBLE);
         lyt_bottom_options.setVisibility(View.GONE);
 
-        if(contact_list_empty) {
+        if(!contact_list_empty) {
             lyt_settings_first_time.setVisibility(View.GONE);
         }else{
             lyt_settings_first_time.setVisibility(View.VISIBLE);
         }
+
+        TextView txtvw_button_contacts_first_time = (TextView) findViewById(R.id.add_contact_button_first_time);
+        txtvw_button_contacts_first_time.setOnClickListener(initialScreenHandler);
 
     }
 
@@ -96,28 +101,33 @@ public class SettingsScreenActivity extends Activity {
     }
 
     private void activateFrequency(){
-        LinearLayout input_frequency = (LinearLayout) findViewById(R.id.layout_location_frequency_input);
         LinearLayout lyt_options = (LinearLayout) findViewById(R.id.layout_options);
+        LinearLayout input_frequency = (LinearLayout) findViewById(R.id.layout_location_frequency_input);
         LinearLayout input_time = (LinearLayout) findViewById(R.id.layout_time_warn_input);
 
         input_frequency.setVisibility(View.VISIBLE);
         lyt_options.setVisibility(View.VISIBLE);
         input_time.setVisibility(View.GONE);
+
+        lyt_options.setOnFocusChangeListener(focusChangeListener);
     }
 
 
     private void activateTimeWarn(){
-        LinearLayout input_frequency = (LinearLayout) findViewById(R.id.layout_location_frequency_input);
         LinearLayout lyt_options = (LinearLayout) findViewById(R.id.layout_options);
+        LinearLayout input_frequency = (LinearLayout) findViewById(R.id.layout_location_frequency_input);
         LinearLayout input_time = (LinearLayout) findViewById(R.id.layout_time_warn_input);
 
         input_frequency.setVisibility(View.GONE);
         lyt_options.setVisibility(View.VISIBLE);
         input_time.setVisibility(View.VISIBLE);
+
+        lyt_options.setOnFocusChangeListener(focusChangeListener);
     }
 
     private void hideOptions(){
         LinearLayout lyt_options = (LinearLayout) findViewById(R.id.layout_options);
+        lyt_options.setOnFocusChangeListener(null);
         lyt_options.setVisibility(View.GONE);
     }
 
@@ -134,9 +144,6 @@ public class SettingsScreenActivity extends Activity {
     }
 
     private void activateAllFeatures(){
-
-        LinearLayout lyt_back_button = (LinearLayout) findViewById(R.id.bottom_bar_back);
-        LinearLayout lyt_about = (LinearLayout) findViewById(R.id.bottom_bar_about);
 
         LinearLayout button_cancel = (LinearLayout) findViewById(R.id.options_button_cancel);
         LinearLayout button_save = (LinearLayout) findViewById(R.id.options_button_save);
@@ -156,11 +163,27 @@ public class SettingsScreenActivity extends Activity {
 
     }
 
+    private void hideKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus && v.getVisibility() == View.VISIBLE) {
+                activateAllFeatures();
+                activateBottomBar();
+                hideKeyboard(v);
+                hideOptions();
+
+            }
+        }
+    };
+
     View.OnClickListener initialScreenHandler = new View.OnClickListener(){
 
         public void onClick(View v) {
-
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 
             switch(v.getId()) {
                 case R.id.bottom_bar_back:
@@ -176,16 +199,17 @@ public class SettingsScreenActivity extends Activity {
                     activateAllFeatures();
                     activateBottomBar();
                     //hides keyboard
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    hideKeyboard(v);
                     break;
                 case R.id.options_button_save:
                     hideOptions();
                     activateAllFeatures();
                     activateBottomBar();
                     //hides keyboard
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    hideKeyboard(v);
                     break;
                 case R.id.layout_blank_contacts:
+                case R.id.add_contact_button_first_time:
                     Intent intentMainContacts = new Intent(SettingsScreenActivity.this ,ContactsScreenActivity.class);
                     SettingsScreenActivity.this.startActivity(intentMainContacts);
                     break;

@@ -34,7 +34,7 @@ import java.util.HashMap;
 public class DBHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "AlsaGPS2.db";
+    public static final String DATABASE_NAME = "AlsaGPS.db";
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
@@ -87,7 +87,7 @@ public class DBHelper extends SQLiteOpenHelper {
         //@todo exceptions
     }
 
-    public void delete(String table_name, String whereClause, String[] whereArgs) {
+    public boolean delete(String table_name, String whereClause, String[] whereArgs) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         // It's a good practice to use parameter ?, instead of concatenate string
@@ -95,8 +95,9 @@ public class DBHelper extends SQLiteOpenHelper {
         /*
         whereArgs = new String[] { String.valueOf(student_Id) }
          */
-        db.delete(table_name, whereClause, whereArgs);
+        int result = db.delete(table_name, whereClause, whereArgs);
         db.close(); // Closing database connection
+        return result > 0;
         //@todo exceptions
     }
 
@@ -119,7 +120,7 @@ public class DBHelper extends SQLiteOpenHelper {
         //@todo exceptions
     }
 
-    public ArrayList get(String selectQuery){
+    public SQLiteDatabase get(String selectQuery){
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -134,20 +135,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
 
 
-        if (cursor.moveToFirst()) {
-            do {
-                /*
-                HashMap<String, String> student = new HashMap<String, String>();
-                student.put("id", cursor.getString(cursor.getColumnIndex(Student.KEY_ID)));
-                student.put("name", cursor.getString(cursor.getColumnIndex(Student.KEY_name)));
-                studentList.add(student);*/
-
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        db.close();
-        return new ArrayList<>();
+        return db;
         //@todo exceptions
 
     }

@@ -24,15 +24,19 @@ package com.mdc.elementary.alsagps;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ContactList{
 
-    private ArrayList contacts_list = null;
+    private HashMap contacts_list = null;
     private static final String CONTACTS_TABLE_NAME = "contacts";
     private static final String CONTACTS_COLUMN_ID = "id";
     private static final String CONTACTS_COLUMN_NAME = "name";
@@ -40,13 +44,13 @@ public class ContactList{
     private Context context = null;
 
     public ContactList(Context context){
-        this.contacts_list = new ArrayList<>();
+        this.contacts_list = new HashMap<String,String>();
         this.context=context;
     }
 
     public static String getCreateTable(){
         return "CREATE TABLE IF NOT EXISTS " + CONTACTS_TABLE_NAME + "("+CONTACTS_COLUMN_ID+
-                " INTEGER PRIMARY KEY, "+CONTACTS_COLUMN_NAME+" TEXT,"+CONTACTS_COLUMN_PHONE+" INTEGER)";
+                " INTEGER PRIMARY KEY, "+CONTACTS_COLUMN_NAME+" TEXT,"+CONTACTS_COLUMN_PHONE+" TEXT)";
     }
     public static String getDeleteTable(){
         return "DROP TABLE IF EXISTS "+ CONTACTS_TABLE_NAME;
@@ -56,10 +60,11 @@ public class ContactList{
         return this.contacts_list == null || this.contacts_list != null && this.contacts_list.isEmpty();
     }
 
-    public int insertContact  (String name, Integer phone)
+    public int insertContact  (String name, String phone)
     {
         ContentValues contentValues = new ContentValues();
         name = DatabaseUtils.sqlEscapeString(name);
+        phone = DatabaseUtils.sqlEscapeString(phone);
         contentValues.put(CONTACTS_COLUMN_NAME, name);
         contentValues.put(CONTACTS_COLUMN_PHONE, phone);
 
@@ -69,12 +74,18 @@ public class ContactList{
     }
 
 
-    public void deleteContact (int id)
+    public void deleteContact (String contact_name)
     {
         DBHelper db = new DBHelper(this.context);
-        String whereClause=" WHERE id = ?";
-        String[] whereArgs = new String[] { String.valueOf(id) };
-        db.delete(this.CONTACTS_TABLE_NAME, whereClause, whereArgs);
+        String whereClause=" name = ?";
+        String[] whereArgs = new String[] { contact_name };
+        boolean result = db.delete(this.CONTACTS_TABLE_NAME, whereClause, whereArgs);
+        Log.e("CREATION", "Remove contact db");
+
+        if(result){
+            this.contacts_list.remove(contact_name);
+            Log.e("CREATION", "Remove contact list");
+        }
         /*
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(CONTACTS_TABLE_NAME,
@@ -83,7 +94,7 @@ public class ContactList{
                 */
     }
 
-    public ArrayList getAllContacts()
+    public HashMap getAllContacts()
     {
         Log.e("CREATION", "get all contacts");
         if(isContactListEmpty()){
@@ -97,17 +108,23 @@ public class ContactList{
     public void loadAllContacts()
     {
         //hp = new HashMap();
-        DBHelper db = new DBHelper(this.context);
-        String selectQuery =  "SELECT  * FROM " + this.CONTACTS_TABLE_NAME;
-        this.contacts_list =db.get(selectQuery);
-        //SQLiteDatabase db = this.getReadableDatabase();
-        /*Cursor res =  db.get( this.CONTACTS_TABLE_NAME, null, null, null, null, null, null);
-        res.moveToFirst();
+        DBHelper dbh = new DBHelper(this.context);
+        String selectQuery =  "SELECT  * FROM " + CONTACTS_TABLE_NAME;
+        SQLiteDatabase db =dbh.get(selectQuery);
 
-        while(!res.isAfterLast()){
-            array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
-            res.moveToNext();
-        }*/
+        this.contacts_list = new HashMap<String, String>();
+        try {
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    this.contacts_list.put(cursor.getString(cursor.getColumnIndex(CONTACTS_COLUMN_NAME)), cursor.getString(cursor.getColumnIndex(CONTACTS_COLUMN_PHONE)));
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
 }

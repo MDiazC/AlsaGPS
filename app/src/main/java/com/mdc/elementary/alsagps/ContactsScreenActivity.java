@@ -21,17 +21,28 @@ package com.mdc.elementary.alsagps;
 */
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.ContentProviderClient;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.os.RemoteException;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class ContactsScreenActivity extends Activity{
 
@@ -46,9 +57,10 @@ public class ContactsScreenActivity extends Activity{
         super.onCreate(savedInstanceState);
 
         this.contact_list.loadAllContacts();
+
         setContentView(R.layout.contacts_screen);
 
-        Boolean contact_list_empty =this.contact_list.isContactListEmpty();
+        boolean contact_list_empty =this.contact_list.isContactListEmpty();
 
         this.visibilityFirstTimeLayout(contact_list_empty);
 
@@ -56,14 +68,64 @@ public class ContactsScreenActivity extends Activity{
 
         if(!contact_list_empty){
             this.activeAllFeatures();
+            fillListView();
         }
     }
+
+    private void fillListView() {
+        ListView lv;
+
+        List<String> list_names = this.getContactListNames();
+
+        lv = (ListView) findViewById(R.id.list_view_contacts);
+
+        if(list_names != null && lv!= null) {
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                    this,
+                    R.layout.list_contacts_remove, R.id.contact_name,
+                    list_names);
+
+            lv.setAdapter(arrayAdapter);
+
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String selected_contact = (String) parent.getAdapter().getItem(position);
+                    removeContact(selected_contact);
+                }
+            });
+        }
+    }
+
+    private ArrayList<String> getContactListNames(){
+        ArrayList<String> list_names = new ArrayList<String>();
+        HashMap your_array_list = this.contact_list.getAllContacts();
+
+        Iterator it = your_array_list.entrySet().iterator();
+        String nameContact = null;
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+
+            try {
+                nameContact = (String)pair.getKey();
+            }catch (ClassCastException e){
+                e.printStackTrace();
+            }
+            list_names.add(nameContact);
+
+            it.remove();
+        }
+
+        return list_names;
+    }
+
     private void activeAllFeatures(){
         LinearLayout lyt_add_contact = (LinearLayout) findViewById(R.id.layout_add_contact_button);
-        Button btn_remove = (Button) findViewById(R.id.remove_button);
+
 
         lyt_add_contact.setOnClickListener(initialScreenHandler);
-        btn_remove.setOnClickListener(initialScreenHandler);
+
     }
 
     private void activateBottomBar(){
@@ -74,7 +136,11 @@ public class ContactsScreenActivity extends Activity{
         lyt_about.setOnClickListener(initialScreenHandler);
     }
 
-    private void removeContact(){
+    private void removeContact(String contact_name){
+        this.contact_list.deleteContact(contact_name);
+        Log.e("CREATION", "Invalidado listview");
+        finish();
+        startActivity(getIntent());
 
     }
 
@@ -109,10 +175,8 @@ public class ContactsScreenActivity extends Activity{
                     Intent intentMainAddContact = new Intent(ContactsScreenActivity.this ,AddContactActivity.class);
                     ContactsScreenActivity.this.startActivity(intentMainAddContact);
                     break;
-                case R.id.remove_button:
-                    removeContact();
-                    break;
             }
         }
     };
+
 }

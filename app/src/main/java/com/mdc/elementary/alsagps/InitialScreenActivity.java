@@ -28,44 +28,46 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class InitialScreenActivity extends Activity{
 
-    private Boolean isActiveApp=false;
+    private boolean isActiveApp=false;
     private ContactList contact_list=null;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.initial_screen);
-        Log.e("CREATION", "prelanzado activiydad");
 
         //this.deleteDatabase("AlsaGPS.db");
+        //this.deleteDatabase("AlsaGPS2.db");
 
         this.contact_list= new ContactList(this);
-        Log.e("CREATION", "New activiydad");
-        ArrayList ar= this.contact_list.getAllContacts();
+        this.contact_list.loadAllContacts();
+        boolean is_contact_list_empty= this.contact_list.isContactListEmpty();
 
-        LinearLayout lyt_settings = (LinearLayout) findViewById(R.id.bottom_bar_settings);
+        this.visibilityFirstTimeLayout(is_contact_list_empty);
 
-        this.visibilityFirstTimeLayout(ar);
-
-        if(ar.isEmpty()) {
+        if(!is_contact_list_empty) {
             this.activeApp();
             this.activateAllFeatures();
         }
 
+        LinearLayout lyt_settings = (LinearLayout) findViewById(R.id.bottom_bar_settings);
+        LinearLayout lyt_settings_first_time = (LinearLayout) findViewById(R.id.bottom_bar_settings_ft);
         lyt_settings.setOnClickListener(initialScreenHandler);
+        lyt_settings_first_time.setOnClickListener(initialScreenHandler);
     }
 
-    private void visibilityFirstTimeLayout(ArrayList ar){
+    private void visibilityFirstTimeLayout(boolean is_contact_list_empty){
 
         LinearLayout lyt_initial_first_time = (LinearLayout) findViewById(R.id.layout_app_first_time);
         LinearLayout lyt_initial_first_time_bottom_bar = (LinearLayout) findViewById(R.id.bottom_bar_first_time);
         LinearLayout lyt_initial_bottom_bar = (LinearLayout) findViewById(R.id.bottom_bar);
 
 
-        if(ar.isEmpty()) {
+        if(!is_contact_list_empty) {
             lyt_initial_first_time.setVisibility(View.GONE);
             lyt_initial_first_time_bottom_bar.setVisibility(View.GONE);
             lyt_initial_bottom_bar.setVisibility(View.VISIBLE);
@@ -117,6 +119,7 @@ public class InitialScreenActivity extends Activity{
 
             switch(v.getId()) {
                 case R.id.bottom_bar_settings:
+                case R.id.bottom_bar_settings_ft:
                     Intent intentMainSettings = new Intent(InitialScreenActivity.this ,SettingsScreenActivity.class);
                     InitialScreenActivity.this.startActivity(intentMainSettings);
                     break;

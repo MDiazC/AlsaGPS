@@ -29,6 +29,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class InternalParams{
     private Integer time_warn = 0;
@@ -96,10 +97,21 @@ public class InternalParams{
     }
 
     public void loadParams(){
-        DBHelper db = new DBHelper(this.context);
-        String selectQuery =  "SELECT  * FROM  " + this.PARAMS_TABLE_NAME;
+        DBHelper dbh = new DBHelper(this.context);
+        String selectQuery =  "SELECT  * FROM  " + PARAMS_TABLE_NAME;
         try {
-            ArrayList array_list = db.get(selectQuery);
+            SQLiteDatabase db =dbh.get(selectQuery);
+            Cursor cursor = db.rawQuery(selectQuery, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    time_warn = Integer.valueOf(cursor.getString(cursor.getColumnIndex(PARAMS_COLUMN_TIME_WARN)));
+                    frequency = Integer.valueOf(cursor.getString(cursor.getColumnIndex(PARAMS_COLUMN_LOCATION_FREQUENCY)));
+                    message = cursor.getString(cursor.getColumnIndex(PARAMS_COLUMN_PERSONAL_MESSAGE));
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
         } catch (SQLException e){
             e.printStackTrace();
         }
