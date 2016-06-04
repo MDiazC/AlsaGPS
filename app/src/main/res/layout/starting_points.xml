@@ -119,39 +119,8 @@
                     style="@style/layoutListContactsPhonebook">
 
                     <ListView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/listView"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1" />
-
-
-                    <RelativeLayout
-                        style="@style/layoutContact">
-
-                        <TextView
-                            style="@style/contactName"
-                            android:text="Pepe"/>
-
-                        <Button
-                            style="@style/addButton"
-                            android:id="@+id/remove_button"
-                            android:clickable="true"/>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        style="@style/layoutContact">
-
-                        <TextView
-                            style="@style/contactName"
-                            android:text="Pepe"/>
-
-                        <Button
-                            style="@style/addButton"
-                            android:clickable="true"/>
-
-                    </RelativeLayout>
+                        android:id="@+id/list_view_starting_points"
+                        style="@style/listviewStartingPoints"/>
                 </LinearLayout>
 
             </LinearLayout>

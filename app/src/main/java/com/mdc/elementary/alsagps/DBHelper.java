@@ -115,7 +115,7 @@ public class DBHelper extends SQLiteOpenHelper {
         */
 
         // It's a good practice to use parameter ?, instead of concatenate string
-        db.update(table_name, values, whereClause, whereArgs);
+        int i = db.update(table_name, values, whereClause, whereArgs);
         db.close(); // Closing database connection
         //@todo exceptions
     }

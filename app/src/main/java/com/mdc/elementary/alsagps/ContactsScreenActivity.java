@@ -21,19 +21,11 @@ package com.mdc.elementary.alsagps;
 */
 
 import android.app.Activity;
-import android.content.ContentProviderClient;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.os.RemoteException;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -47,6 +39,7 @@ import java.util.Map;
 public class ContactsScreenActivity extends Activity{
 
     private ContactList contact_list=null;
+    ArrayAdapter<String> arrayAdapter=null;
 
     public ContactsScreenActivity(){
         this.contact_list= new ContactList(this);
@@ -80,21 +73,35 @@ public class ContactsScreenActivity extends Activity{
         lv = (ListView) findViewById(R.id.list_view_contacts);
 
         if(list_names != null && lv!= null) {
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+            this.arrayAdapter = new ArrayAdapter<String>(
                     this,
                     R.layout.list_contacts_remove, R.id.contact_name,
                     list_names);
 
-            lv.setAdapter(arrayAdapter);
+            lv.setAdapter(this.arrayAdapter);
 
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     String selected_contact = (String) parent.getAdapter().getItem(position);
                     removeContact(selected_contact);
+                    updateListview(selected_contact);
                 }
             });
         }
+    }
+
+    public void btnRemoveContact(View v){
+        ListView lv = (ListView) findViewById(R.id.list_view_contacts);
+        final int position = lv.getPositionForView((View) v.getParent());
+        String selected_contact = (String)  lv.getAdapter().getItem(position);
+        removeContact(selected_contact);
+        updateListview(selected_contact);
+
+    }
+
+    private void updateListview(String name){
+        arrayAdapter.remove(name);
     }
 
     private ArrayList<String> getContactListNames(){
@@ -137,11 +144,11 @@ public class ContactsScreenActivity extends Activity{
     }
 
     private void removeContact(String contact_name){
-        this.contact_list.deleteContact(contact_name);
-        Log.e("CREATION", "Invalidado listview");
-        finish();
-        startActivity(getIntent());
-
+        contact_list.deleteContact(contact_name);
+        if(contact_list.isContactListEmpty()) {
+            finish();
+            startActivity(getIntent());
+        }
     }
 
     private void visibilityFirstTimeLayout(Boolean contact_list_empty){

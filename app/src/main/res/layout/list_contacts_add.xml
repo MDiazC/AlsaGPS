@@ -11,7 +11,8 @@
             style="@style/layoutButtonListContacts">
             <Button
                 style="@style/addButton"
-                android:id="@+id/add_contact_green"/>
+                android:id="@+id/add_contact_green"
+                android:onClick="btnAddContact"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

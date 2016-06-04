@@ -45,6 +45,12 @@ public class PersonalMessageActivity extends Activity{
         setContentView(R.layout.personal_message);
 
         this.activateAllFeatures();
+        this.insertInViewPersonalMessage();
+    }
+
+    private void insertInViewPersonalMessage(){
+        EditText edtTxt_personal_message = (EditText) findViewById(R.id.personal_message_text);
+        edtTxt_personal_message.setText(this.internal_params.getPersonalMessage());
     }
 
     private void activateAllFeatures(){
@@ -70,7 +76,12 @@ public class PersonalMessageActivity extends Activity{
     }
 
     private void saveMessage(){
+        EditText edtTxt_personal_message = (EditText) findViewById(R.id.personal_message_text);
+        String message = edtTxt_personal_message.getText().toString();
+        if(!message.equals("")){
+            internal_params.setPersonalMessage(message);
 
+        }
     }
 
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {

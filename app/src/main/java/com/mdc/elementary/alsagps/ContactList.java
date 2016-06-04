@@ -56,21 +56,34 @@ public class ContactList{
         return "DROP TABLE IF EXISTS "+ CONTACTS_TABLE_NAME;
     }
 
-    public Boolean isContactListEmpty(){
+    public boolean isContactListEmpty(){
         return this.contacts_list == null || this.contacts_list != null && this.contacts_list.isEmpty();
     }
 
     public int insertContact  (String name, String phone)
     {
         ContentValues contentValues = new ContentValues();
-        name = DatabaseUtils.sqlEscapeString(name);
-        phone = DatabaseUtils.sqlEscapeString(phone);
+        name = this.escapeString(name);
+        phone = this.escapeString(phone);
         contentValues.put(CONTACTS_COLUMN_NAME, name);
         contentValues.put(CONTACTS_COLUMN_PHONE, phone);
 
         DBHelper db = new DBHelper(this.context);
         int id =db.insert(this.CONTACTS_TABLE_NAME, contentValues);
         return id;
+    }
+
+    private String escapeString(String text){
+        text = DatabaseUtils.sqlEscapeString(text);
+        StringBuilder text_sb = new StringBuilder(text);
+        if(text_sb.charAt(0) == ('\'')){
+            text_sb = text_sb.deleteCharAt(0);
+        }
+        if(text_sb.charAt(text_sb.length() - 1) == ('\'')){
+            text_sb = text_sb.deleteCharAt(text_sb.length() - 1);
+        }
+
+        return text_sb.toString();
     }
 
 
@@ -83,6 +96,9 @@ public class ContactList{
         Log.e("CREATION", "Remove contact db");
 
         if(result){
+            if(this.isContactListEmpty()){
+                this.loadAllContacts();
+            }
             this.contacts_list.remove(contact_name);
             Log.e("CREATION", "Remove contact list");
         }

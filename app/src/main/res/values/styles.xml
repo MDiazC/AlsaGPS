@@ -876,9 +876,15 @@
     <style name="currentPositionName" parent="addContactInput">
         <item name="android:hint">@string/name_current_position_text</item>
         <item name="android:inputType">text</item>
-
     </style>
 
+    <style name="listviewStartingPoints">
+        <item name="android:layout_width">250dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
 
     <!-- +++++++++++++++ END OF STARTING POINT SCREEN +++++++++++++++++++ -->
 

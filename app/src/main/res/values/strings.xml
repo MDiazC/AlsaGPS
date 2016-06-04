@@ -54,7 +54,7 @@
     <string name="longitude_text">Longitude:</string>
     <string name="name_current_position_text">Type name current position</string>
     <string name="save_current_position_text">Save current position</string>
-    <string name="contact_info_text">Contact details: \n always_safe_gps@gmail.com \n @alwayssafegps</string>
+    <string name="contact_info_text">Contact details: \n always.safe.gps@gmail.com \n @always_safe_gps</string>
     <string name="market_text">If you are satisfied with the app \n please give us a good review \n in the play store</string>
     <string name="developer_text">AlwaysSafeGPS was developed \n by Moises Diaz</string>
     <string name="add_contact_manually">Add contact manually</string>

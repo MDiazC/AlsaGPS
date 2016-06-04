@@ -48,6 +48,7 @@ import java.util.Map;
 public class AddContactActivity  extends Activity {
 
     private HashMap<String,ArrayList<String>> agenda_contacts = null;
+    private ArrayAdapter<Contact> arrayAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,23 +73,37 @@ public class AddContactActivity  extends Activity {
         lv = (ListView) findViewById(R.id.list_view_add_contact);
 
         if(array_list != null && lv!= null) {
-            ArrayAdapter<Contact> arrayAdapter = new ArrayAdapter<Contact>(
+            this.arrayAdapter = new ArrayAdapter<Contact>(
                     this,
                     R.layout.list_contacts_add, R.id.contact_name,
                     array_list);
 
-            lv.setAdapter(arrayAdapter);
+            lv.setAdapter(this.arrayAdapter);
 
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Contact selectd_contact = (Contact) parent.getAdapter().getItem(position);
                     saveContact(selectd_contact.getName(), selectd_contact.getNumber());
-                    ListView lv = (ListView) findViewById(R.id.list_view_add_contact);
-                    lv.invalidateViews();
+                    updateListView(selectd_contact);
                 }
             });
         }
+    }
+
+    public void btnAddContact(View v){
+        ListView lv = (ListView) findViewById(R.id.list_view_add_contact);
+        final int position = lv.getPositionForView((View) v.getParent());
+        Contact selectd_contact = (Contact) lv.getAdapter().getItem(position);
+        saveContact(selectd_contact.getName(), selectd_contact.getNumber());
+        updateListView(selectd_contact);
+
+    }
+
+    private void updateListView(Contact contact){
+
+        arrayAdapter.remove(contact);
+        //arrayAdapter.notifyDataSetChanged();
     }
 
     private List<Contact> getListContactsAgenda() {
@@ -96,9 +111,10 @@ public class AddContactActivity  extends Activity {
         List<Contact> array_list = new ArrayList<Contact>();
         String nameContact =null;
         ArrayList<String> listNumbers= null;
-        Contact contact;
 
         Iterator it = this.agenda_contacts.entrySet().iterator();
+        ContactList cl = new ContactList(this);
+        HashMap contact_list = cl.getAllContacts();
 
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
@@ -109,14 +125,19 @@ public class AddContactActivity  extends Activity {
             }catch (ClassCastException e){
                 e.printStackTrace();
             }
-            array_list = addItemToList(array_list, nameContact, listNumbers);
+            array_list = addItemToList(array_list, nameContact, listNumbers, contact_list);
 
             it.remove();
         }
         return array_list;
     }
 
-    private List<Contact> addItemToList( List<Contact> array_list,  String nameContact, ArrayList<String> listNumbers) {
+    private boolean isAlreadyInserted(String name, String number, HashMap contact_list){
+
+        return (contact_list.get(name) != null && contact_list.get(name).equals(number)) || (contact_list.get(name + " [ " + number + " ]") != null && contact_list.get(name + " [ " + number + " ]").equals(number));
+    }
+
+    private List<Contact> addItemToList( List<Contact> array_list,  String nameContact, ArrayList<String> listNumbers, HashMap contact_list) {
         Contact contact = null;
         if(listNumbers != null){
             if(listNumbers.size() > 1) {
@@ -124,13 +145,17 @@ public class AddContactActivity  extends Activity {
                     contact = new Contact();
                     contact.setName(nameContact + " [ " + listNumbers.get(i) + " ]");
                     contact.setNumber(listNumbers.get(i));
-                    array_list.add(contact);
+                    if(!isAlreadyInserted(nameContact, listNumbers.get(i), contact_list)) {
+                        array_list.add(contact);
+                    }
                 }
             }else{
                 contact = new Contact();
                 contact.setName(nameContact);
                 contact.setNumber(listNumbers.get(0));
-                array_list.add(contact);
+                if(!isAlreadyInserted(nameContact, listNumbers.get(0), contact_list)) {
+                    array_list.add(contact);
+                }
             }
         }
         return array_list;
@@ -178,7 +203,7 @@ public class AddContactActivity  extends Activity {
     }
 
     private void saveContact(String contactName, String contactNumber){
-        this.agenda_contacts.remove(contactName);
+        agenda_contacts.remove(contactName);
         ContactList cl = new ContactList(this);
         cl.insertContact(contactName, contactNumber);
     }

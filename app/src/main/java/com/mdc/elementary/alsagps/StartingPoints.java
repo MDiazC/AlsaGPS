@@ -80,7 +80,7 @@ public class StartingPoints extends Activity {
         }
     }
 
-    public int insertStartingPoint(String name, Float latitude, Float longitude){
+    public int insertStartingPoint(String name, String latitude, String longitude){
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(SP_COLUMN_NAME, name);
@@ -93,10 +93,10 @@ public class StartingPoints extends Activity {
 
     }
 
-    public void deleteStartingPoint(int id){
+    public void deleteStartingPoint(String name){
         DBHelper db = new DBHelper(this.context);
-        String whereClause=" WHERE id = ?";
-        String[] whereArgs = new String[] { String.valueOf(id) };
+        String whereClause=" "+SP_COLUMN_NAME+" = ?";
+        String[] whereArgs = new String[] { name };
         db.delete(this.SP_TABLE_NAME, whereClause, whereArgs);
     }
 }

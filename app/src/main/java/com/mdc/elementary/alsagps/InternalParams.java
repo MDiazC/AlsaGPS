@@ -47,7 +47,7 @@ public class InternalParams{
     public InternalParams(Context context){
         time_warn = 6;
         frequency = 10;
-        message = "";
+        message = null;
         this.context=context;
     }
 
@@ -69,7 +69,7 @@ public class InternalParams{
     }
 
     public String getPersonalMessage(){
-        return this.message;
+        return this.message.isEmpty()?"":this.message;
     }
 
     public void setTimeWarn(Integer new_time){
@@ -102,16 +102,23 @@ public class InternalParams{
         try {
             SQLiteDatabase db =dbh.get(selectQuery);
             Cursor cursor = db.rawQuery(selectQuery, null);
+            boolean isEmptyTable = true;
 
             if (cursor.moveToFirst()) {
                 do {
                     time_warn = Integer.valueOf(cursor.getString(cursor.getColumnIndex(PARAMS_COLUMN_TIME_WARN)));
                     frequency = Integer.valueOf(cursor.getString(cursor.getColumnIndex(PARAMS_COLUMN_LOCATION_FREQUENCY)));
                     message = cursor.getString(cursor.getColumnIndex(PARAMS_COLUMN_PERSONAL_MESSAGE));
+                     isEmptyTable=false;
                 } while (cursor.moveToNext());
             }
             cursor.close();
             db.close();
+
+            if(isEmptyTable){
+                this.createRegisters();
+            }
+
         } catch (SQLException e){
             e.printStackTrace();
         }
@@ -124,11 +131,34 @@ public class InternalParams{
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(PARAMS_COLUMN_LOCATION_FREQUENCY, this.frequency);
-        message = DatabaseUtils.sqlEscapeString(message);
+        message = this.escapeString(message);
         contentValues.put(PARAMS_COLUMN_PERSONAL_MESSAGE, this.message);
         contentValues.put(PARAMS_COLUMN_TIME_WARN, this.time_warn);
         db.update(PARAMS_TABLE_NAME, contentValues, "id = ? ", new String[] { "1" } );
         return true;
+    }
+
+    private String escapeString(String text){
+        text = DatabaseUtils.sqlEscapeString(text);
+        StringBuilder text_sb = new StringBuilder(text);
+        if(text_sb.charAt(0) == ('\'')){
+            text_sb = text_sb.deleteCharAt(0);
+        }
+        if(text_sb.charAt(text_sb.length() - 1) == ('\'')){
+            text_sb = text_sb.deleteCharAt(text_sb.length() - 1);
+        }
+
+        return text_sb.toString();
+    }
+
+    private void createRegisters(){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(PARAMS_COLUMN_LOCATION_FREQUENCY, this.frequency);
+        contentValues.put(PARAMS_COLUMN_PERSONAL_MESSAGE, this.message);
+        contentValues.put(PARAMS_COLUMN_TIME_WARN, this.time_warn);
+
+        DBHelper db = new DBHelper(this.context);
+        int id =db.insert(this.PARAMS_TABLE_NAME, contentValues);
     }
 
 }

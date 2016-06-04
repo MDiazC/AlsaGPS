@@ -110,7 +110,7 @@
             <LinearLayout
                 android:id="@+id/layout_settings_first_time"
                 style="@style/layoutSettingsFirstTime"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <!-- HIDDEN HEADER AND BAR -->
                 <LinearLayout

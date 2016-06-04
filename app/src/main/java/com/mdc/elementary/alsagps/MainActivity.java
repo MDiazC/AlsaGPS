@@ -34,13 +34,24 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.loading_screen);
 
-        try{
-            Thread.sleep(3000);
-            Intent intentMain = new Intent(MainActivity.this , InitialScreenActivity.class);
-            MainActivity.this.startActivity(intentMain);
-        }catch(InterruptedException e){
+        Thread welcomeThread = new Thread() {
 
-        }
+            @Override
+            public void run() {
+                try {
+                    super.run();
+                    sleep(10000);  //Delay of 10 seconds
+                } catch (Exception e) {
+
+                } finally {
+
+                    Intent intentMain = new Intent(MainActivity.this , InitialScreenActivity.class);
+                    MainActivity.this.startActivity(intentMain);
+                    finish();
+                }
+            }
+        };
+        welcomeThread.start();
     }
 }
 

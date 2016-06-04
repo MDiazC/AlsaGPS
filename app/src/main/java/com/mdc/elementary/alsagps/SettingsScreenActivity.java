@@ -21,19 +21,15 @@ package com.mdc.elementary.alsagps;
 */
 
 import android.app.Activity;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 
 public class SettingsScreenActivity extends Activity {
     private InternalParams internal_params = null;
@@ -61,6 +57,18 @@ public class SettingsScreenActivity extends Activity {
 
         if(!contact_list_empty) {
             this.activateAllFeatures();
+        }
+    }
+
+    private void insertInternalParams(){
+        EditText edtTxt_frequency = (EditText) findViewById(R.id.location_frequency_input);
+        EditText edtTxt_personal_message = (EditText) findViewById(R.id.input_time_warn);
+        if(edtTxt_frequency.getVisibility() == View.VISIBLE) {
+            edtTxt_frequency.setText(this.internal_params.getFrequency().toString());
+        }
+
+        if(edtTxt_personal_message.getVisibility() == View.VISIBLE) {
+            edtTxt_personal_message.setText(this.internal_params.getTimeWarn().toString());
         }
     }
 
@@ -109,6 +117,8 @@ public class SettingsScreenActivity extends Activity {
         lyt_options.setVisibility(View.VISIBLE);
         input_time.setVisibility(View.GONE);
 
+        insertInternalParams();
+
         lyt_options.setOnFocusChangeListener(focusChangeListener);
     }
 
@@ -121,6 +131,8 @@ public class SettingsScreenActivity extends Activity {
         input_frequency.setVisibility(View.GONE);
         lyt_options.setVisibility(View.VISIBLE);
         input_time.setVisibility(View.VISIBLE);
+
+        insertInternalParams();
 
         lyt_options.setOnFocusChangeListener(focusChangeListener);
     }
@@ -163,6 +175,23 @@ public class SettingsScreenActivity extends Activity {
 
     }
 
+    private void saveOptions(){
+        EditText edtTxt_frequency = (EditText) findViewById(R.id.location_frequency_input);
+        EditText edtTxt_time = (EditText) findViewById(R.id.input_time_warn);
+        if(edtTxt_frequency.getVisibility() == View.VISIBLE){
+            String frequency = edtTxt_frequency.getText().toString();
+            if(!frequency.equals("")){
+                internal_params.setFrequency(Integer.parseInt(frequency));
+            }
+        }
+        if(edtTxt_time.getVisibility() == View.VISIBLE){
+            String time = edtTxt_time.getText().toString();
+            if(!time.equals("")){
+                internal_params.setTimeWarn(Integer.parseInt(time));
+            }
+        }
+    }
+
     private void hideKeyboard(View v) {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
@@ -202,11 +231,13 @@ public class SettingsScreenActivity extends Activity {
                     hideKeyboard(v);
                     break;
                 case R.id.options_button_save:
+                    saveOptions();
                     hideOptions();
                     activateAllFeatures();
                     activateBottomBar();
                     //hides keyboard
                     hideKeyboard(v);
+
                     break;
                 case R.id.layout_blank_contacts:
                 case R.id.add_contact_button_first_time:
