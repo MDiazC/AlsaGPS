@@ -20,11 +20,12 @@ package com.mdc.elementary.alsagps;
 
 */
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -68,8 +69,6 @@ public class PersonalMessageActivity extends Activity{
         layout_body.setOnFocusChangeListener(focusChangeListener);
     }
 
-
-
     public void hideKeyboard(View v) {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
@@ -79,9 +78,23 @@ public class PersonalMessageActivity extends Activity{
         EditText edtTxt_personal_message = (EditText) findViewById(R.id.personal_message_text);
         String message = edtTxt_personal_message.getText().toString();
         if(!message.equals("")){
+            edtTxt_personal_message.clearFocus();
             internal_params.setPersonalMessage(message);
-
+            this.showConfirmationMessage();
         }
+    }
+
+    private void showConfirmationMessage(){
+        LinearLayout lyt_contact_added = (LinearLayout) findViewById(R.id.layout_layout_message_saved);
+
+        ObjectAnimator fadeOut = ObjectAnimator.ofFloat(lyt_contact_added, "alpha",  1f, 0f);
+        fadeOut.setDuration(2000);
+        ObjectAnimator fadeIn = ObjectAnimator.ofFloat(lyt_contact_added, "alpha", 0f, 1f);
+        fadeIn.setDuration(2000);
+
+        final AnimatorSet mAnimationSet = new AnimatorSet();
+        mAnimationSet.play(fadeOut).after(fadeIn);
+        mAnimationSet.start();
     }
 
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
@@ -99,8 +112,7 @@ public class PersonalMessageActivity extends Activity{
 
             switch(v.getId()) {
                 case R.id.bottom_bar_back:
-                    Intent intentMainSettings = new Intent(PersonalMessageActivity.this ,SettingsScreenActivity.class);
-                    PersonalMessageActivity.this.startActivity(intentMainSettings);
+                    onBackPressed();
                     break;
                 case R.id.bottom_bar_about:
                     Intent intentMainAbout = new Intent(PersonalMessageActivity.this ,AboutScreenActivity.class);

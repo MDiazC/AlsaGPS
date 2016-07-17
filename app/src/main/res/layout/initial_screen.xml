@@ -31,7 +31,8 @@
         <LinearLayout
             android:orientation="vertical"
             style="@style/layoutAppDisabled"
-            android:id="@+id/layout_app_disabled">
+            android:id="@+id/layout_app_disabled"
+            android:visibility="visible">
 
             <!-- SWITCH BUTTON -->
             <LinearLayout
@@ -67,7 +68,7 @@
 
                 <!-- HELP BUTTON GREY -->
                 <Button
-                    style="@style/helpButton"
+                    style="@style/helpButtonOff"
                     android:id="@+id/help_button"/>
 
             </LinearLayout>
@@ -127,9 +128,14 @@
             android:id="@+id/layout_app_first_time"
             android:visibility="gone">
 
-            <TextView
-                android:id="@+id/text_first_time"
-                style="@style/initialScreenTextFirstTime" />
+            <LinearLayout
+                android:id="@+id/layout_blank_first_time"
+                style="@style/layoutBlankFirstTime">
+
+                <TextView
+                    android:id="@+id/settings_text_first_time"
+                    style="@style/initialScreenTextFirstTime"/>
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/image_first_time"

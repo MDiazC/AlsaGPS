@@ -20,26 +20,23 @@ package com.mdc.elementary.alsagps;
 
 */
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.content.ContentProviderClient;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.os.RemoteException;
-import android.provider.ContactsContract;
-import android.support.v7.internal.widget.AdapterViewCompat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -47,7 +44,7 @@ import java.util.Map;
 
 public class AddContactActivity  extends Activity {
 
-    private HashMap<String,ArrayList<String>> agenda_contacts = null;
+    private HashMap agenda_contacts = null;
     private ArrayAdapter<Contact> arrayAdapter = null;
 
     @Override
@@ -59,7 +56,7 @@ public class AddContactActivity  extends Activity {
         this.activeAllFeatures();
 
         if(this.agenda_contacts == null){
-            this.agenda_contacts = this.fetchContactsCProviderClient();
+            this.agenda_contacts = this.getAgendaContacts();
         }
 
         fillListView();
@@ -110,7 +107,7 @@ public class AddContactActivity  extends Activity {
 
         List<Contact> array_list = new ArrayList<Contact>();
         String nameContact =null;
-        ArrayList<String> listNumbers= null;
+        String numberContact= null;
 
         Iterator it = this.agenda_contacts.entrySet().iterator();
         ContactList cl = new ContactList(this);
@@ -120,15 +117,21 @@ public class AddContactActivity  extends Activity {
             Map.Entry pair = (Map.Entry)it.next();
 
             try {
-                listNumbers = (ArrayList<String>) pair.getValue();
+                numberContact = (String) pair.getValue();
                 nameContact = (String)pair.getKey();
             }catch (ClassCastException e){
                 e.printStackTrace();
             }
-            array_list = addItemToList(array_list, nameContact, listNumbers, contact_list);
+            array_list = addItemToList(array_list, nameContact, numberContact, contact_list);
 
             it.remove();
         }
+
+        Collections.sort(array_list, new Comparator<Contact>(){
+            public int compare(Contact o1, Contact o2){
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
         return array_list;
     }
 
@@ -137,26 +140,13 @@ public class AddContactActivity  extends Activity {
         return (contact_list.get(name) != null && contact_list.get(name).equals(number)) || (contact_list.get(name + " [ " + number + " ]") != null && contact_list.get(name + " [ " + number + " ]").equals(number));
     }
 
-    private List<Contact> addItemToList( List<Contact> array_list,  String nameContact, ArrayList<String> listNumbers, HashMap contact_list) {
-        Contact contact = null;
-        if(listNumbers != null){
-            if(listNumbers.size() > 1) {
-                for (int i = 0; i < listNumbers.size(); i++) {
-                    contact = new Contact();
-                    contact.setName(nameContact + " [ " + listNumbers.get(i) + " ]");
-                    contact.setNumber(listNumbers.get(i));
-                    if(!isAlreadyInserted(nameContact, listNumbers.get(i), contact_list)) {
-                        array_list.add(contact);
-                    }
-                }
-            }else{
-                contact = new Contact();
-                contact.setName(nameContact);
-                contact.setNumber(listNumbers.get(0));
-                if(!isAlreadyInserted(nameContact, listNumbers.get(0), contact_list)) {
-                    array_list.add(contact);
-                }
-            }
+    private List<Contact> addItemToList(List<Contact> array_list, String nameContact, String numberContact, HashMap cl){
+        Contact contact;
+        if(!isAlreadyInserted(nameContact, numberContact, cl)){
+            contact = new Contact();
+            contact.setName(nameContact);
+            contact.setNumber(nameContact);
+            array_list.add(contact);
         }
         return array_list;
     }
@@ -197,7 +187,7 @@ public class AddContactActivity  extends Activity {
         String number = edtTxt_number.getText().toString();
         if(!name.equals("") && !number.equals("")){
             if(this.isNumber(number)) {
-                saveContact(name, number);
+                this.saveContact(name, number);
             }
         }
     }
@@ -206,7 +196,23 @@ public class AddContactActivity  extends Activity {
         agenda_contacts.remove(contactName);
         ContactList cl = new ContactList(this);
         cl.insertContact(contactName, contactNumber);
+        showConfirmationMessage();
     }
+
+    private void showConfirmationMessage(){
+        //layout_layout_contact_added
+        LinearLayout lyt_contact_added = (LinearLayout) findViewById(R.id.layout_layout_contact_added);
+
+        ObjectAnimator fadeOut = ObjectAnimator.ofFloat(lyt_contact_added, "alpha",  1f, 0f);
+        fadeOut.setDuration(2000);
+        ObjectAnimator fadeIn = ObjectAnimator.ofFloat(lyt_contact_added, "alpha", 0f, 1f);
+        fadeIn.setDuration(2000);
+
+        final AnimatorSet mAnimationSet = new AnimatorSet();
+        mAnimationSet.play(fadeOut).after(fadeIn);
+        mAnimationSet.start();
+    }
+
 
     private Boolean isNumber(String number){
         String number_2 = number.replaceAll("[^\\d]", "");
@@ -232,55 +238,12 @@ public class AddContactActivity  extends Activity {
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
-    private HashMap<String, ArrayList<String>> fetchContactsCProviderClient()
-    {
-        HashMap<String, ArrayList<String>> mContactList = null;
+    private HashMap getAgendaContacts(){
+        HashMap contact ;
+        AgendaContactsList acl = new AgendaContactsList(this);
+        contact= acl.getAllAgendaContacts();
 
-        ContentResolver cResolver=this.getContentResolver();
-        ContentProviderClient mCProviderClient = cResolver.acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI);
-        if(mCProviderClient != null) {
-            try {
-                String[] projection    = new String[] {ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER};
-                Cursor mCursor = mCProviderClient.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
-                if (mCursor != null && mCursor.getCount() > 0) {
-                    mContactList = gatherInfoInArrayList(mCursor);
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-                mContactList = null;
-            } catch (Exception e) {
-                e.printStackTrace();
-                mContactList = null;
-            }
-
-            mCProviderClient.release();
-        }
-
-        return mContactList;
-    }
-
-    private HashMap gatherInfoInArrayList(Cursor mCursor) {
-        String displayName;
-        String number;
-        HashMap<String, ArrayList<String>> mContactList = new HashMap<String,ArrayList<String>>();;
-        mCursor.moveToFirst();
-        do {
-
-            displayName = mCursor.getString(mCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            number = mCursor.getString(mCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-            ArrayList<String>  listNumbers= new ArrayList<String>();
-
-            if(mContactList.get(displayName) != null){
-                listNumbers = mContactList.get(displayName);
-            }
-
-            listNumbers.add(number);
-            mContactList.put(displayName, listNumbers);
-        }while(mCursor.moveToNext());
-
-        mCursor.close();
-        return mContactList;
+        return contact;
     }
 
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
@@ -301,8 +264,9 @@ public class AddContactActivity  extends Activity {
 
             switch(v.getId()) {
                 case R.id.bottom_bar_back:
-                    Intent intentMainSettings = new Intent(AddContactActivity.this ,ContactsScreenActivity.class);
-                    AddContactActivity.this.startActivity(intentMainSettings);
+                    onBackPressed();
+                    //Intent intentMainContact = new Intent(AddContactActivity.this ,ContactsScreenActivity.class);
+                    //AddContactActivity.this.startActivity(intentMainContact);
                     break;
                 case R.id.bottom_bar_about:
                     Intent intentMainAbout = new Intent(AddContactActivity.this ,AboutScreenActivity.class);
@@ -328,39 +292,4 @@ public class AddContactActivity  extends Activity {
     };
 }
 
-class Contact{
-    private String name;
-    private String number;
 
-    @Override
-    public String toString(){
-        return name;
-    }
-
-    public String getName(){
-        return name;
-    }
-
-    public String getNumber(){
-        return number;
-    }
-
-    public void setName(String new_name){
-        if(!new_name.isEmpty())
-            this.name=new_name;
-    }
-
-    public void setNumber(String new_number){
-        Double val = null;
-        String new_number_2 = new_number.replaceAll("[^\\d]", "");
-        try {
-            val = Double.valueOf(new_number_2);
-        }catch (NumberFormatException e){
-            if(new_number_2 != null) {
-                this.number=new_number;
-            }
-        }
-        if(val != null)
-            this.number=new_number;
-    }
-}

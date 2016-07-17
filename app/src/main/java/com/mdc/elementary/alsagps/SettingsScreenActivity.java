@@ -30,7 +30,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 public class SettingsScreenActivity extends Activity {
     private InternalParams internal_params = null;
     private ContactList contact_list=null;
@@ -216,8 +215,7 @@ public class SettingsScreenActivity extends Activity {
 
             switch(v.getId()) {
                 case R.id.bottom_bar_back:
-                    Intent intentMainSettings = new Intent(SettingsScreenActivity.this ,InitialScreenActivity.class);
-                    SettingsScreenActivity.this.startActivity(intentMainSettings);
+                    onBackPressed();
                     break;
                 case R.id.bottom_bar_about:
                     Intent intentMainAbout = new Intent(SettingsScreenActivity.this ,AboutScreenActivity.class);
@@ -227,7 +225,6 @@ public class SettingsScreenActivity extends Activity {
                     hideOptions();
                     activateAllFeatures();
                     activateBottomBar();
-                    //hides keyboard
                     hideKeyboard(v);
                     break;
                 case R.id.options_button_save:
@@ -235,7 +232,6 @@ public class SettingsScreenActivity extends Activity {
                     hideOptions();
                     activateAllFeatures();
                     activateBottomBar();
-                    //hides keyboard
                     hideKeyboard(v);
 
                     break;
@@ -261,5 +257,22 @@ public class SettingsScreenActivity extends Activity {
             }
         }
     };
+    @Override
+    public void onResume(){
+        super.onResume();
 
+        this.contact_list= new ContactList(this);
+        this.contact_list.loadAllContacts();
+        Boolean contact_list_empty= this.contact_list.isContactListEmpty();
+
+        this.internal_params = new InternalParams(this);
+        this.internal_params.loadParams();
+
+        this.visibilityFirstTimeLayout(contact_list_empty);
+        this.activateBottomBar();
+
+        if(!contact_list_empty) {
+            this.activateAllFeatures();
+        }
+    }
 }

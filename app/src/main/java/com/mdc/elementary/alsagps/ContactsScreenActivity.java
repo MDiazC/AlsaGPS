@@ -20,6 +20,8 @@ package com.mdc.elementary.alsagps;
 
 */
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -148,6 +150,8 @@ public class ContactsScreenActivity extends Activity{
         if(contact_list.isContactListEmpty()) {
             finish();
             startActivity(getIntent());
+        }else {
+            this.showConfirmationMessage();
         }
     }
 
@@ -164,14 +168,46 @@ public class ContactsScreenActivity extends Activity{
         }
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        this.contact_list.loadAllContacts();
+
+        boolean contact_list_empty =this.contact_list.isContactListEmpty();
+
+        this.visibilityFirstTimeLayout(contact_list_empty);
+
+        this.activateBottomBar();
+
+        if(!contact_list_empty){
+            this.activeAllFeatures();
+            fillListView();
+        }
+
+    }
+
+    private void showConfirmationMessage(){
+        LinearLayout lyt_contact_added = (LinearLayout) findViewById(R.id.layout_layout_contact_removed);
+
+        ObjectAnimator fadeOut = ObjectAnimator.ofFloat(lyt_contact_added, "alpha",  1f, 0f);
+        fadeOut.setDuration(2000);
+        ObjectAnimator fadeIn = ObjectAnimator.ofFloat(lyt_contact_added, "alpha", 0f, 1f);
+        fadeIn.setDuration(2000);
+
+        final AnimatorSet mAnimationSet = new AnimatorSet();
+        mAnimationSet.play(fadeOut).after(fadeIn);
+        mAnimationSet.start();
+    }
+
     View.OnClickListener initialScreenHandler = new View.OnClickListener(){
 
         public void onClick(View v) {
 
             switch(v.getId()) {
                 case R.id.bottom_bar_back:
-                    Intent intentMainSettings = new Intent(ContactsScreenActivity.this ,SettingsScreenActivity.class);
-                    ContactsScreenActivity.this.startActivity(intentMainSettings);
+                    onBackPressed();
+                    //Intent intentMainSettings = new Intent(ContactsScreenActivity.this ,SettingsScreenActivity.class);
+                    //ContactsScreenActivity.this.startActivity(intentMainSettings);
                     break;
                 case R.id.bottom_bar_about:
                     Intent intentMainAbout = new Intent(ContactsScreenActivity.this ,AboutScreenActivity.class);
@@ -185,5 +221,4 @@ public class ContactsScreenActivity extends Activity{
             }
         }
     };
-
 }

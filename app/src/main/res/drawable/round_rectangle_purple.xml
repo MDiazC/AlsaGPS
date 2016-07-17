@@ -20,17 +20,15 @@
 
  -->
 
-<resources>
-    <dimen name="help_button_font_size">60dp</dimen>
-    <dimen name="app_name">36dp</dimen>
-    <dimen name="bottom_bar">15dp</dimen>
-    <dimen name="about_interrogation">40dp</dimen>
-    <dimen name="settings_button">25dp</dimen>
-    <dimen name="text_header">45dp</dimen>
-    <dimen name="first_time_text">35dp</dimen>
-    <dimen name="start_first_time_text">37dp</dimen>
-    <dimen name="confirmation_message">30dp</dimen>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" >
 
-    <dimen name="height_bottom_bar">70dp</dimen>
-    <dimen name="height_bottom_bar_plus_margin">80dp</dimen>
-</resources>
+    <solid android:color="@color/grey_button" />
+
+    <corners android:radius="10dip" />
+
+    <stroke
+        android:width="3dp"
+        android:color="@color/purple_color" />
+
+</shape>

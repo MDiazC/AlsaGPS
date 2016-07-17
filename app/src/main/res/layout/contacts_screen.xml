@@ -98,14 +98,19 @@
                     android:id="@+id/layout_blank_contacts_first_time"
                     style="@style/layoutBlankContactsFirstTime">
 
-                    <TextView
-                        android:id="@+id/contacts_text_first_time"
-                        style="@style/contactsTextFirstTime"/>
+                    <LinearLayout
+                        android:id="@+id/layout_blank_first_time"
+                        style="@style/layoutBlankFirstTime">
+
+                        <TextView
+                            android:id="@+id/settings_text_first_time"
+                            style="@style/contactsTextFirstTime"/>
+                    </LinearLayout>
 
                     <ImageView
-                        android:id="@+id/settings_arrow_first_time"
-                        style="@style/arrowFirstTime"
-                        android:contentDescription="Purple arrow" />
+                        android:id="@+id/contacts_arrow_first_time"
+                        style="@style/contactsArrowFirstTime"
+                        android:contentDescription="Purple arrow"/>
 
                 </LinearLayout>
                 <FrameLayout
@@ -128,6 +133,18 @@
 
         </LinearLayout>
     </FrameLayout>
+    <LinearLayout
+        style="@style/layoutLayoutConfirmationMessage"
+        android:id="@+id/layout_layout_contact_removed"
+        android:alpha="0">
+        <LinearLayout
+            android:id="@+id/layout_contact_removed"
+            style="@style/layoutConfirmationMessage">
+            <TextView
+                android:id="@+id/text_contact_removed"
+                style="@style/textContactRemoved"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <!-- BOTTOM BAR -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

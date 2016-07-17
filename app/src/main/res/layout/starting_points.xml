@@ -72,7 +72,7 @@
                             <TextView
                                 android:id="@+id/current_position_latitude_number"
                                 style="@style/currentPositionColumnRight"
-                                android:text="43.5567"/>
+                                android:text="-"/>
                         </LinearLayout>
                         <LinearLayout
                             android:id="@+id/current_position_longitude"
@@ -84,7 +84,7 @@
                                 />
                             <TextView
                                 android:id="@+id/current_position_longitude_number"
-                                android:text="32.6645"
+                                android:text="-"
                                 style="@style/currentPositionColumnRight"/>
                         </LinearLayout>
                     </LinearLayout>

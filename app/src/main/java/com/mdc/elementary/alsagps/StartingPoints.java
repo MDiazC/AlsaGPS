@@ -67,9 +67,9 @@ public class StartingPoints extends Activity {
             Cursor cursor = db.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
                 do {
-                    ArrayList aux_array = new ArrayList();
-                    aux_array.add(cursor.getString(cursor.getColumnIndex(SP_COLUMN_LATITUDE)));
-                    aux_array.add(cursor.getString(cursor.getColumnIndex(SP_COLUMN_LONGITUDE)));
+                    ArrayList aux_array = new ArrayList<Double>();
+                    aux_array.add(cursor.getDouble(cursor.getColumnIndex(SP_COLUMN_LATITUDE)));
+                    aux_array.add(cursor.getDouble(cursor.getColumnIndex(SP_COLUMN_LONGITUDE)));
                     this.starting_points_list.put(cursor.getString(cursor.getColumnIndex(SP_COLUMN_NAME)), aux_array);
                 } while (cursor.moveToNext());
             }

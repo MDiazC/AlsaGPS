@@ -127,16 +127,6 @@
         <item name="android:textSize">@dimen/first_time_text</item>
     </style>
 
-    <style name="arrowFirstTime">
-        <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:layout_width">200dp</item>
-        <item name="android:layout_height">180dp</item>
-        <item name="android:src">@drawable/arrow_purple</item>
-        <item name="android:background">@color/transparent</item>
-        <item name="android:scaleType">fitXY</item>
-    </style>
-
-
     <style name="circleAddContactButtonFirstTime">
         <item name="android:layout_width">340dp</item>
         <item name="android:layout_height">120dp</item>
@@ -153,9 +143,6 @@
         <item name="android:ems">10</item>
     </style>
 
-    <!-- +++++++++++++++ END OF GENERIC STYLE +++++++++++++++++++ -->
-    <!-- +++++++++++++++ LOADING SCREEN +++++++++++++++++++ -->
-
     <style name="layoutHelpButton">
         <item name="android:orientation">vertical</item>
         <item name="android:layout_width">wrap_content</item>
@@ -168,9 +155,49 @@
     <style name="helpButton">
         <item name="android:layout_width">230dp</item>
         <item name="android:layout_height">230dp</item>
-        <item name="android:background">@drawable/round_button_help_disabled</item>
         <item name="android:textSize">@dimen/help_button_font_size</item>
         <item name="android:text">@string/help_button_text</item>
+    </style>
+
+    <style name="arrowFirstTime">
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">180dp</item>
+        <item name="android:src">@drawable/arrow_purple</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:scaleType">fitXY</item>
+    </style>
+
+    <style name="layoutBlankFirstTime">
+        <item name="android:layout_width">320dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/round_rectangle_purple</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="layoutLayoutConfirmationMessage">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="layoutConfirmationMessage" parent="layoutBlankFirstTime">
+        <item name="android:layout_width">300dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginBottom">75dp</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- +++++++++++++++ END OF GENERIC STYLE +++++++++++++++++++ -->
+    <!-- +++++++++++++++ LOADING SCREEN +++++++++++++++++++ -->
+
+    <style name="helpButtonOff" parent="helpButton">
+        <item name="android:background">@drawable/round_button_help_disabled</item>
         <item name="android:textColor">@color/grey_button</item>
     </style>
 
@@ -194,11 +221,57 @@
     </style>
 
     <style name="layoutLoadingScreen">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
 
+    <style name="loadingScreenImage">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">200dp</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="layoutLoadingFirstTimeText">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="layoutWelcomeFirstTime" parent="layoutBlankFirstTime">
+        <item name="android:layout_marginBottom">20dp</item>
+    </style>
+
+    <style name="textWelcomeFirstTime" parent="textFirstTime">
+        <item name="android:textSize">@dimen/first_time_text</item>
+        <item name="android:text">@string/welcome_text</item>
+    </style>
+
+    <style name="textExplainFirstTime" parent="textFirstTime">
+        <item name="android:textSize">@dimen/settings_button</item>
+        <item name="android:text">@string/explain_arrows_text</item>
+    </style>
+
+    <style name="layoutStartFirstTime" parent="layoutBlankFirstTime">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">20dp</item>
+    </style>
+
+    <style name="textStartFirstTime" parent="textFirstTime">
+        <item name="android:textSize">@dimen/text_header</item>
+        <item name="android:text">@string/start_welcome_text</item>
+    </style>
+
+    <style name="layoutStartArrow">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
 
 <!-- +++++++++++++++ END OF LOADING SCREEN +++++++++++++++++++ -->
 
@@ -268,12 +341,8 @@
         <item name="android:layout_width">wrap_content</item>
     </style>
 
-    <style name="helpButtonOn">
-        <item name="android:layout_width">230dp</item>
-        <item name="android:layout_height">230dp</item>
+    <style name="helpButtonOn" parent="helpButton">
         <item name="android:background">@drawable/round_button_help_enabled</item>
-        <item name="android:textSize">@dimen/help_button_font_size</item>
-        <item name="android:text">@string/help_button_text</item>
         <item name="android:textColor">@color/white_color</item>
     </style>
 
@@ -305,7 +374,7 @@
         <item name="android:background">@color/transparent</item>
         <item name="android:textSize">@dimen/start_first_time_text</item>
         <item name="android:textColor">@color/purple_color</item>
-        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
     <style name="initialScreenImageFirstTime">
@@ -429,12 +498,7 @@
     <!-- FIRST TIME -->
     <style name="settingsTextFirstTime" parent="textFirstTime">
         <item name="android:text">@string/check_contact_list</item>
-    </style>
-
-
-    <style name="settingsArrowFirstTime" parent="arrowFirstTime">
-        <item name="android:src">@drawable/arrow_purple</item>
-        <item name="android:rotation">180</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
     <style name="addContactButtonFirstTime">
@@ -464,7 +528,6 @@
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:background">@color/transparent</item>
     </style>
-
 
     <!-- END OF FIRST TIME -->
 
@@ -606,6 +669,11 @@
         <item name="android:text">@string/contacts_text</item>
     </style>
 
+    <style name="textContactRemoved" parent="textFirstTime">
+        <item name="android:text">@string/contact_removed</item>
+        <item name="android:textSize">@dimen/confirmation_message</item>
+    </style>
+
     <!-- FIRST TIME -->
 
     <style name="layoutListContactFirstTime" parent="layoutInternalScreen">
@@ -625,7 +693,7 @@
 
     <style name="contactsTextFirstTime" parent="textFirstTime">
         <item name="android:text">@string/add_contacts_list_text</item>
-        <item name="android:layout_marginTop">30dp</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
     <style name="buttonAddContactFirstTime" parent="buttonAddContact">
@@ -643,6 +711,10 @@
         <item name="android:layout_marginTop">-15dp</item>
     </style>
 
+    <style name="contactsArrowFirstTime" parent="arrowFirstTime">
+        <item name="android:layout_height">140dp</item>
+        <item name="android:layout_width">160dp</item>
+    </style>
 
     <!-- END OF FIRST TIME -->
 
@@ -729,6 +801,11 @@
         <item name="android:background">@color/transparent</item>
     </style>
 
+    <style name="textContactAdded" parent="textFirstTime">
+        <item name="android:text">@string/contact_added</item>
+        <item name="android:textSize">@dimen/confirmation_message</item>
+    </style>
+
     <!-- +++++++++++++++ END OF ADD CONTACT SCREEN +++++++++++++++++++ -->
 
     <!-- +++++++++++++++ PERSONAL MESSAGE SCREEN +++++++++++++++++++ -->
@@ -780,6 +857,11 @@
         <item name="android:focusableInTouchMode">true</item>
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
+    </style>
+
+    <style name="textMessageSaved" parent="textFirstTime">
+        <item name="android:text">@string/message_saved</item>
+        <item name="android:textSize">@dimen/confirmation_message</item>
     </style>
 
     <!-- +++++++++++++++ END OF PERSONAL MESSAGE SCREEN +++++++++++++++++++ -->

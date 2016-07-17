@@ -28,7 +28,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -40,9 +39,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class StartingPointActivity extends Activity {
+public class StartingPointActivity extends Activity implements MyCallback{
     private StartingPoints starting_points = null;
     ArrayAdapter<String> arrayAdapter=null;
+    ThreadUpdateCoordsSP updateCoords;
 
     public StartingPointActivity() {
         this.starting_points = new StartingPoints(this);
@@ -57,6 +57,7 @@ public class StartingPointActivity extends Activity {
 
         activateAllFeatures();
         fillListView();
+        getCoordinates();
     }
 
     private void fillListView() {
@@ -168,10 +169,22 @@ public class StartingPointActivity extends Activity {
         fillListView();
     }
 
-
     private void hideKeyboard(View v) {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    private void getCoordinates(){
+        GPSSystem gps = new GPSSystem(this);
+        if(gps.canGetLocation()){
+            this.updateCoords = new ThreadUpdateCoordsSP(gps);
+            this.updateCoords.callback = this;
+            this.updateCoords.run();
+        }else{
+            gps.showSettingsAlert();
+        }
+        gps.stopUsingGPS();
+        gps=null;
     }
 
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
@@ -189,8 +202,7 @@ public class StartingPointActivity extends Activity {
 
             switch(v.getId()) {
                 case R.id.bottom_bar_back:
-                    Intent intentMainSettings = new Intent(StartingPointActivity.this ,InitialScreenActivity.class);
-                    StartingPointActivity.this.startActivity(intentMainSettings);
+                    onBackPressed();
                     break;
                 case R.id.bottom_bar_about:
                     Intent intentMainAbout = new Intent(StartingPointActivity.this ,AboutScreenActivity.class);
@@ -203,4 +215,17 @@ public class StartingPointActivity extends Activity {
            }
         }
     };
+
+    public void updateCoordinates(double latitude, double longitude ) {
+        TextView edtTxt_longitude = (TextView) findViewById(R.id.current_position_longitude_number);
+        TextView edtTxt_latitude = (TextView) findViewById(R.id.current_position_latitude_number);
+
+        if(edtTxt_latitude.getVisibility() == View.VISIBLE && edtTxt_longitude.getVisibility() == View.VISIBLE) {
+            edtTxt_longitude.setText(" " + Double.toString(Math.floor(longitude * 100000) / 100000));
+            edtTxt_latitude.setText(" " + Double.toString(Math.floor(latitude * 100000) / 100000));
+        }
+    }
+
+    @Override
+    public void stopApp(){}
 }

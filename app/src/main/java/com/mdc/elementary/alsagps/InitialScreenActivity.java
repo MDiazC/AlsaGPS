@@ -21,27 +21,27 @@
 package com.mdc.elementary.alsagps;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+public class InitialScreenActivity extends Activity implements MyCallback{
 
-public class InitialScreenActivity extends Activity{
-
-    private boolean isActiveApp=false;
+    private boolean appActivated=false;
     private ContactList contact_list=null;
+    ThreadTrackCoordinates threadGPS = null;
+    ThreadAutomaticSMS threadSMS = null;
+    boolean areThreadsLaunched = false;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.initial_screen);
-
-        //this.deleteDatabase("AlsaGPS.db");
-        //this.deleteDatabase("AlsaGPS2.db");
 
         this.contact_list= new ContactList(this);
         this.contact_list.loadAllContacts();
@@ -50,7 +50,7 @@ public class InitialScreenActivity extends Activity{
         this.visibilityFirstTimeLayout(is_contact_list_empty);
 
         if(!is_contact_list_empty) {
-            this.activeApp();
+            this.changeOnOffButton();
             this.activateAllFeatures();
         }
 
@@ -66,7 +66,6 @@ public class InitialScreenActivity extends Activity{
         LinearLayout lyt_initial_first_time_bottom_bar = (LinearLayout) findViewById(R.id.bottom_bar_first_time);
         LinearLayout lyt_initial_bottom_bar = (LinearLayout) findViewById(R.id.bottom_bar);
 
-
         if(!is_contact_list_empty) {
             lyt_initial_first_time.setVisibility(View.GONE);
             lyt_initial_first_time_bottom_bar.setVisibility(View.GONE);
@@ -76,16 +75,14 @@ public class InitialScreenActivity extends Activity{
             lyt_initial_first_time_bottom_bar.setVisibility(View.VISIBLE);
             lyt_initial_bottom_bar.setVisibility(View.GONE);
         }
-
     }
 
-    private void activeApp(){
+    private void changeOnOffButton(){
 
         LinearLayout lyt_initial_switch_button_on = (LinearLayout) findViewById(R.id.layout_app_enabled);
         LinearLayout lyt_initial_switch_button_off = (LinearLayout) findViewById(R.id.layout_app_disabled);
 
-
-        if(this.isActiveApp){
+        if(this.appActivated){
             lyt_initial_switch_button_on.setVisibility(View.VISIBLE);
             lyt_initial_switch_button_off.setVisibility(View.GONE);
         }else{
@@ -101,7 +98,7 @@ public class InitialScreenActivity extends Activity{
 
         LinearLayout lyt_switch_button_off = (LinearLayout) findViewById(R.id.layout_switch_button);
         LinearLayout lyt_switch_button_on = (LinearLayout) findViewById(R.id.layout_switch_button_enabled);
-        LinearLayout lyt_help_button = (LinearLayout) findViewById(R.id.layout_help_button_enabled);
+        Button lyt_help_button = (Button) findViewById(R.id.help_button_on);
 
         lyt_starting_points.setOnClickListener(initialScreenHandler);
         lyt_about.setOnClickListener(initialScreenHandler);
@@ -109,7 +106,6 @@ public class InitialScreenActivity extends Activity{
         lyt_switch_button_off.setOnClickListener(initialScreenHandler);
         lyt_switch_button_on.setOnClickListener(initialScreenHandler);
         lyt_help_button.setOnClickListener(initialScreenHandler);
-
     }
 
 
@@ -132,73 +128,144 @@ public class InitialScreenActivity extends Activity{
                     InitialScreenActivity.this.startActivity(intentMainAbout);
                     break;
                 case R.id.layout_switch_button:
-                    isActiveApp=true;
-                    activeApp();
+                    appActivated=true;
+                    changeOnOffButton();
                     activateAllFeatures();
+                    activateApp();
                     break;
                 case R.id.layout_switch_button_enabled:
-                    isActiveApp = false;
-                    activeApp();
+                    appActivated = false;
+                    changeOnOffButton();
                     activateAllFeatures();
+                    deactivateApp();
                     break;
-                case R.id.layout_help_button_enabled:
-                    //Inform the user the button2 has been clicked
+                case R.id.help_button_on:
+                    sendSMSManually();
                     break;
             }
         }
     };
 
-   /* private void activateAllFeatures(){
-
-        LinearLayout lyt_starting_points = (LinearLayout) findViewById(R.id.bottom_bar_starting_points);
-        LinearLayout lyt_about = (LinearLayout) findViewById(R.id.bottom_bar_about);
-
-        LinearLayout lyt_switch_button_off = (LinearLayout) findViewById(R.id.layout_switch_button);
-        LinearLayout lyt_switch_button_on = (LinearLayout) findViewById(R.id.layout_switch_button_enabled);
-        LinearLayout lyt_help_button = (LinearLayout) findViewById(R.id.layout_help_button_enabled);
-
-        lyt_starting_points.setOnClickListener(initialScreenHandler);
-        lyt_about.setOnClickListener(initialScreenHandler);
-
-        lyt_switch_button_off.setOnClickListener(initialScreenHandler);
-        lyt_switch_button_on.setOnClickListener(initialScreenHandler);
-        lyt_help_button.setOnClickListener(initialScreenHandler);
-
-
+    private void sendSMSManually(){
+        SMSSystem sms = new SMSSystem(this);
+        sms.sendSMS();
     }
 
-
-    View.OnClickListener initialScreenHandler = new View.OnClickListener(){
-
-        public void onClick(View v) {
-
-            switch(v.getId()) {
-                case R.id.bottom_bar_settings:
-                        Intent intentMainSettings = new Intent(InitialScreenActivity.this ,SettingsScreenActivity.class);
-                        InitialScreenActivity.this.startActivity(intentMainSettings);
-                    break;
-                case R.id.bottom_bar_starting_points:
-                        Intent intentMainStartingPoints = new Intent(InitialScreenActivity.this ,StartingPointActivity.class);
-                        InitialScreenActivity.this.startActivity(intentMainStartingPoints);
-                    break;
-                case R.id.bottom_bar_about:
-                        Intent intentMainAbout = new Intent(InitialScreenActivity.this ,AboutScreenActivity.class);
-                        InitialScreenActivity.this.startActivity(intentMainAbout);
-                    break;
-                case R.id.layout_switch_button:
-                        Intent intentMainAbout = new Intent(InitialScreenActivity.this ,AboutScreenActivity.class);
-                        InitialScreenActivity.this.startActivity(intentMainAbout);
-                    activeApp;
-                    break;
-                case R.id.layout_switch_button_enabled:
-                    //Inform the user the button1 has been clicked
-                    Toast.makeText(this, "Button1 clicked.", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.layout_help_button_enabled:
-                    //Inform the user the button2 has been clicked
-                    Toast.makeText(this, "Button2 clicked.", Toast.LENGTH_SHORT).show();
-                    break;
+    private void activateApp(){
+        boolean is_contact_list_empty= this.contact_list.isContactListEmpty();
+        if(!is_contact_list_empty){
+            if(!this.areThreadsLaunched) {
+                StartingPoints sp = new StartingPoints(this);
+                sp.loadStartingPoints();
+                if(sp.getStartingPoints() == null || sp.getStartingPoints().isEmpty()){
+                    this.appActivated = false;
+                    this.showStartingPointsAlert();
+                    changeOnOffButton();
+                    activateAllFeatures();
+                }else{
+                    GPSSystem gps = new GPSSystem(this);
+                    if(gps.canGetLocation()){
+                        Log.e("CREATE", "activateApp");
+                        this.threadGPS = new ThreadTrackCoordinates(this, gps);
+                        this.threadGPS.run();
+                        this.threadSMS = new ThreadAutomaticSMS(this);
+                        this.threadSMS.callback = this;
+                        this.threadSMS.run();
+                        this.areThreadsLaunched=true;
+                    }else {
+                        this.appActivated = false;
+                        gps.showSettingsAlert();
+                        changeOnOffButton();
+                        activateAllFeatures();
+                    }
+                    gps.stopUsingGPS();
+                    gps=null;
+                }
             }
         }
-    };*/
+    }
+
+    private void showStartingPointsAlert(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+        // Setting Dialog Title
+        alertDialog.setTitle("Starting points");
+
+        // Setting Dialog Message
+        alertDialog.setMessage("You new to set a starting point before activating the app");
+
+        // On pressing Settings button
+        alertDialog.setPositiveButton("Starting points", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                Intent intentMainStartingPoints = new Intent(InitialScreenActivity.this ,StartingPointActivity.class);
+                InitialScreenActivity.this.startActivity(intentMainStartingPoints);
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog.show();
+    }
+
+    private void deactivateApp(){
+        this.areThreadsLaunched= false;
+        Log.e("CREATE", "deactivateApp");
+        if(this.threadGPS != null) {
+            this.threadGPS.stopThread();
+            this.threadGPS=null;
+        }
+        if(this.threadSMS != null) {
+            this.threadSMS.stopThread();
+            this.threadSMS = null;
+        }
+    }
+
+    public void stopApp(){
+        this.appActivated = false;
+        this.deactivateApp();
+        this.changeOnOffButton();
+        this.activateAllFeatures();
+    }
+
+    @Override
+    public void updateCoordinates(double latitude, double longitude){}
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        savedInstanceState.putBoolean("appActivated", this.appActivated);
+        savedInstanceState.putParcelable("threadGPS", this.threadGPS);
+        savedInstanceState.putParcelable("threadSMS", this.threadSMS);
+        savedInstanceState.putBoolean("areThreadsLaunched", this.areThreadsLaunched);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        this.appActivated = savedInstanceState.getBoolean("appActivated");
+        this.threadGPS = savedInstanceState.getParcelable("threadGPS");
+        this.threadSMS = savedInstanceState.getParcelable("threadSMS");
+        this.areThreadsLaunched = savedInstanceState.getBoolean("areThreadsLaunched");
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        this.contact_list= new ContactList(this);
+        this.contact_list.loadAllContacts();
+        boolean is_contact_list_empty= this.contact_list.isContactListEmpty();
+
+        this.visibilityFirstTimeLayout(is_contact_list_empty);
+
+        if(!is_contact_list_empty) {
+            this.changeOnOffButton();
+            this.activateAllFeatures();
+        }
+
+        LinearLayout lyt_settings = (LinearLayout) findViewById(R.id.bottom_bar_settings);
+        LinearLayout lyt_settings_first_time = (LinearLayout) findViewById(R.id.bottom_bar_settings_ft);
+        lyt_settings.setOnClickListener(initialScreenHandler);
+        lyt_settings_first_time.setOnClickListener(initialScreenHandler);
+    }
 }

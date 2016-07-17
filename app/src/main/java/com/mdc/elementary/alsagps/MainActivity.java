@@ -22,9 +22,12 @@
 package com.mdc.elementary.alsagps;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,77 +36,83 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.loading_screen);
+        this.deleteDatabase("AlsaGPS.db");
 
-        Thread welcomeThread = new Thread() {
+        final ImportAgendaContacts iac = new ImportAgendaContacts(this);
 
-            @Override
+        if (!iac.contactsImported()) {
+            this.firstTimeBehaviour(iac);
+        }
+        else{
+            startApp();
+            Thread updateAgendaContactsThread = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        super.run();
+                        Log.e("CREATE", "run UpdateContacts");
+                        iac.fetchAgendaContacts();
+                        Log.e("CREATE", "(run) end UpdateContacts");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            updateAgendaContactsThread.start();
+        }
+    }
+
+    private void firstTimeBehaviour(final ImportAgendaContacts iac) {
+        Thread firstImportAgendaContactsThread = new Thread() {
+                @Override
             public void run() {
                 try {
                     super.run();
-                    sleep(10000);  //Delay of 10 seconds
+                    Log.e("CREATE", "run UpdateContacts");
+                    iac.fetchAgendaContacts();
+                    Log.e("CREATE", "(run) end UpdateContacts");
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 } finally {
-
-                    Intent intentMain = new Intent(MainActivity.this , InitialScreenActivity.class);
-                    MainActivity.this.startActivity(intentMain);
-                    finish();
+                    LinearLayout lyt_starting_points = (LinearLayout) findViewById(R.id.layout_loading_first_time);
+                    lyt_starting_points.setOnClickListener(initialScreenHandler);
                 }
             }
         };
-        welcomeThread.start();
+        firstImportAgendaContactsThread.start();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                LinearLayout lyt_explain = (LinearLayout) findViewById(R.id.layout_explain_first_time);
+                lyt_explain.setVisibility(View.VISIBLE);
+            }
+        }, 3000);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                LinearLayout lyt_explain = (LinearLayout) findViewById(R.id.layout_start_arrow);
+                lyt_explain.setVisibility(View.VISIBLE);
+            }
+        }, 6000);
     }
-}
 
-/*
+    private void startApp(){
+        Intent intentMain = new Intent(MainActivity.this , InitialScreenActivity.class);
+        MainActivity.this.startActivity(intentMain);
+        finish();
+    }
 
-public class Activity1 extends Activity {
-//
-@Override
-public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.main);
+    View.OnClickListener initialScreenHandler = new View.OnClickListener(){
 
-    Button next = (Button) findViewById(R.id.Button01);
-    next.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View view) {
-            Intent myIntent = new Intent(view.getContext(), Activity2.class);
-            startActivityForResult(myIntent, 0);
+        public void onClick(View v) {
+
+            switch(v.getId()) {
+                case R.id.layout_loading_first_time:
+                    startApp();
+                    break;
+            }
         }
-
-    });
+    };
 }
-}
-
-public class Activity2 extends Activity {
-
-//
-public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.main2);
-
-    Button next = (Button) findViewById(R.id.Button02);
-    next.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View view) {
-            Intent intent = new Intent();
-            setResult(RESULT_OK, intent);
-            finish();
-        }
-
-    });
-}
-
-
--------------------------------------------------
-Also Make Sure to Create 2 different xml in Layout folder and add both Activity in Manifest File like
-
-<activity android:name=".Activity2"></activity>
--------------------------------------------------
-
-
-
-            // Hide status bar
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            // Show status bar
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        */

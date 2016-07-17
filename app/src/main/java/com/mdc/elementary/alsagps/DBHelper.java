@@ -23,7 +23,6 @@ package com.mdc.elementary.alsagps;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -32,7 +31,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DBHelper extends SQLiteOpenHelper {
-    // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "AlsaGPS.db";
     public DBHelper(Context context) {
@@ -46,14 +44,9 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(ContactList.getCreateTable());
         db.execSQL(InternalParams.getCreateTable());
         db.execSQL(StartingPoints.getCreateTable());
-        Log.e("CREATION", "New tabla");
+        db.execSQL(GPSPartial.getCreateTable());
+        db.execSQL(AgendaContactsList.getCreateTable());
 
-        /*
-        try {
-            db.execSQL(this.SQL_CREATE_ENTRIES);
-        }catch (Exception e){
-            Throw E
-        } */
         //@todo exceptions
     }
 
@@ -63,8 +56,9 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(ContactList.getDeleteTable());
         db.execSQL(InternalParams.getDeleteTable());
         db.execSQL(StartingPoints.getDeleteTable());
+        db.execSQL(GPSPartial.getDeleteTable());
+        db.execSQL(AgendaContactsList.getDeleteTable());
 
-        // Create tables again
         onCreate(db);
 
         //@todo exceptions
@@ -75,10 +69,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         //Open connection to write data
         SQLiteDatabase db = this.getWritableDatabase();
-        /*ContentValues values = new ContentValues();
-        values.put(Student.KEY_age, student.age);
-        values.put(Student.KEY_email,student.email);
-        values.put(Student.KEY_name, student.name); */
 
         // Inserting Row
         long id = db.insert(table_name, null, values);
@@ -90,11 +80,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public boolean delete(String table_name, String whereClause, String[] whereArgs) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-        // It's a good practice to use parameter ?, instead of concatenate string
 
-        /*
-        whereArgs = new String[] { String.valueOf(student_Id) }
-         */
         int result = db.delete(table_name, whereClause, whereArgs);
         db.close(); // Closing database connection
         return result > 0;
@@ -104,15 +90,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public void update(String table_name, ContentValues values, String whereClause, String[] whereArgs) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-        /*
-        ContentValues values = new ContentValues();
-
-        values.put(Student.KEY_age, student.age);
-        values.put(Student.KEY_email,student.email);
-        values.put(Student.KEY_name, student.name);
-
-        whereArgs = new String[] { String.valueOf(student.student_ID) }
-        */
 
         // It's a good practice to use parameter ?, instead of concatenate string
         int i = db.update(table_name, values, whereClause, whereArgs);
@@ -123,21 +100,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public SQLiteDatabase get(String selectQuery){
 
         SQLiteDatabase db = this.getReadableDatabase();
-
-        /*
-        String selectQuery =  "SELECT  " +
-                Student.KEY_ID + "," +
-                Student.KEY_name + "," +
-                Student.KEY_email + "," +
-                Student.KEY_age +
-                " FROM " + Student.TABLE; */
-
         Cursor cursor = db.rawQuery(selectQuery, null);
-
 
         return db;
         //@todo exceptions
-
     }
 
 }

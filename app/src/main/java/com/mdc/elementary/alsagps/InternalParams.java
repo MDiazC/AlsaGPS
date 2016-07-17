@@ -20,16 +20,12 @@
 
 package com.mdc.elementary.alsagps;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class InternalParams{
     private Integer time_warn = 0;
@@ -69,7 +65,7 @@ public class InternalParams{
     }
 
     public String getPersonalMessage(){
-        return this.message.isEmpty()?"":this.message;
+        return (this.message != null && !this.message.isEmpty())?this.message:"";
     }
 
     public void setTimeWarn(Integer new_time){

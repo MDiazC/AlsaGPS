@@ -71,6 +71,19 @@
         </LinearLayout>
     </FrameLayout>
 
+    <LinearLayout
+        style="@style/layoutLayoutConfirmationMessage"
+        android:id="@+id/layout_layout_message_saved"
+        android:alpha="0">
+        <LinearLayout
+            android:id="@+id/layout_message_saved"
+            style="@style/layoutConfirmationMessage">
+            <TextView
+                android:id="@+id/text_message_saved"
+                style="@style/textMessageSaved"/>
+        </LinearLayout>
+    </LinearLayout>
+
     <!-- BOTTOM BAR -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/backBottomBar"

@@ -31,7 +31,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
             <LinearLayout
                 android:id="@+id/layout_settings"
                 style="@style/layoutSettings"
@@ -110,7 +109,7 @@
             <LinearLayout
                 android:id="@+id/layout_settings_first_time"
                 style="@style/layoutSettingsFirstTime"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <!-- HIDDEN HEADER AND BAR -->
                 <LinearLayout
@@ -140,7 +139,6 @@
                         android:text="@string/contacts_text"/>
                 <LinearLayout
                     style="@style/circleAddContactButtonFirstTime"
-                    android:text="@string/contacts_text"
                     android:id="@+id/circle_add_contact_button_first_time">
 
                 </LinearLayout>
@@ -149,15 +147,21 @@
 
                 <!-- END OF CONTACTS BUTTON -->
 
+
                 <ImageView
                     android:id="@+id/settings_arrow_first_time"
-                    style="@style/settingsArrowFirstTime"
-                    android:contentDescription="Purple arrow" />
+                    style="@style/arrowFirstTime"
+                    android:contentDescription="Purple arrow"
+                    android:rotation="180"/>
 
-                <TextView
-                    android:id="@+id/settings_text_first_time"
-                    style="@style/settingsTextFirstTime"/>
+                <LinearLayout
+                    android:id="@+id/layout_blank_first_time"
+                    style="@style/layoutBlankFirstTime">
 
+                    <TextView
+                        android:id="@+id/settings_text_first_time"
+                        style="@style/settingsTextFirstTime"/>
+                </LinearLayout>
 
             </LinearLayout>
             <!-- END OF SETTINGS SCREEN FIRST TIME -->

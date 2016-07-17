@@ -26,8 +26,8 @@
 
     <LinearLayout
         android:id="@+id/layout_blank_app_name"
-        style="@style/layoutBlankAppName">
-
+        style="@style/layoutBlankAppName"
+        android:layout_gravity="center_horizontal">
             <TextView
                 android:id="@+id/app_name"
                 style="@style/mainAppName" />
@@ -39,8 +39,48 @@
         android:id="@+id/layout_help_button">
 
         <Button
-            style="@style/helpButton"
+            style="@style/helpButtonOff"
             android:id="@+id/help_button"
             />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_loading_first_time"
+        style="@style/layoutLoadingFirstTimeText"
+        android:visibility="visible"
+        android:background="@color/grey_layout">
+        <LinearLayout
+            android:id="@+id/layout_welcome_first_time"
+            style="@style/layoutWelcomeFirstTime">
+
+            <TextView
+                android:id="@+id/loading_welcome_first_time"
+                style="@style/textWelcomeFirstTime"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layout_explain_first_time"
+            style="@style/layoutBlankFirstTime"
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/loading_explain_first_time"
+                style="@style/textExplainFirstTime"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layout_start_arrow"
+            style="@style/layoutStartArrow"
+            android:visibility="invisible">
+            <ImageView
+            android:id="@+id/loading_arrow_first_time"
+            style="@style/arrowFirstTime"
+            android:contentDescription="Purple arrow" />
+            <LinearLayout
+                android:id="@+id/layout_start_first_time_text"
+                style="@style/layoutStartFirstTime">
+
+                <TextView
+                    android:id="@+id/text_start_first_time"
+                    style="@style/textStartFirstTime"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </FrameLayout>
