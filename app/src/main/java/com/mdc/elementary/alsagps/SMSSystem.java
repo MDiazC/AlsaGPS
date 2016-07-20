@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -90,7 +91,7 @@ public class SMSSystem {
             try {
                 if(!contactNumber.isEmpty()) {
                     SmsManager smsManager = SmsManager.getDefault();
-//                    smsManager.sendTextMessage(contactNumber, null, SMSmessage, null, null);
+                    smsManager.sendTextMessage(contactNumber, null, SMSmessage, null, null);
                     System.out.println("SMS sent. \n");
                     System.out.println("SMS number:"+contactNumber+" SMS message:'"+SMSmessage+"'\n");
                 }
@@ -135,62 +136,15 @@ public class SMSSystem {
         sp.loadStartingPoints();
         HashMap points = sp.getStartingPoints();
 
-        boolean matching = this.matchingPositionWithSP(points, coordinates);
+        boolean matching = sp.matchingWithPosition(points, coordinates);
         if(!matching){
             this.sendSMS();
         }
     }
 
-    private boolean matchingPositionWithSP(HashMap points, double[] coordinates){
-        boolean matching = false;
-        boolean success;
-        Iterator it = points.entrySet().iterator();
-
-        ArrayList<Double> spCoordinates;
-        double spLat, spLon;
-
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-
-            try {
-                spCoordinates = (ArrayList)pair.getValue();
-
-                spLat=(Double) spCoordinates.get(0);
-                Log.e("CREATE", "matchingPositionWithSP get lat "+spLat);
-                spLon=(Double) spCoordinates.get(1);
-                Log.e("CREATE", "matchingPositionWithSP get lon "+spLon);
-                success=this.compareCoordinates(coordinates[0], coordinates[1], spLat, spLon);
-                if(success){
-                    matching=true;
-                    break;
-                }
-
-            }catch (ClassCastException e){
-                e.printStackTrace();
-            }
-
-            it.remove();
-        }
-        return matching;
-    }
-
-    private boolean compareCoordinates(double currentLat, double currentLon, double spLat, double spLon){
-        boolean equal = false;
-        double distance = 0.001;
-        Log.e("CREATE", "culat "+currentLat+" cuLon "+currentLon+" spLa "+spLat+" spLo "+spLon);
-        if(currentLat + distance > spLat && currentLat - distance < spLat){
-            Log.e("CREATE", "Match lat");
-            if(currentLon + distance > spLon && currentLon - distance < spLon) {
-                Log.e("CREATE", "Match lon");
-                equal = true;
-            }
-        }
-        return equal;
-    }
-
     private void showSettingsAlert(String msg){
 
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this.context);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(this.context, R.style.AlertDialogCustom));
 
         // Setting Dialog Title
         alertDialog.setTitle("SMS system ");

@@ -64,4 +64,5 @@
     <string name="contact_removed">Contact removed</string>
     <string name="contact_added">Contact added</string>
     <string name="message_saved">Mesage saved</string>
+    <string name="sp_explanation">A Starting point allows us to know where did you start your journey.\n\nIf you forget to deactivate your app and you are in a starting point the app deactivate by itself</string>
 </resources>

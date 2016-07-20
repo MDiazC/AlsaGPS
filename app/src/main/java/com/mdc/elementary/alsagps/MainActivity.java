@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.loading_screen);
-        this.deleteDatabase("AlsaGPS.db");
+        //this.deleteDatabase("AlsaGPS.db");
 
         final ImportAgendaContacts iac = new ImportAgendaContacts(this);
 
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout lyt_explain = (LinearLayout) findViewById(R.id.layout_explain_first_time);
                 lyt_explain.setVisibility(View.VISIBLE);
             }
-        }, 3000);
+        }, 5000);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout lyt_explain = (LinearLayout) findViewById(R.id.layout_start_arrow);
                 lyt_explain.setVisibility(View.VISIBLE);
             }
-        }, 6000);
+        }, 9000);
     }
 
     private void startApp(){

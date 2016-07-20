@@ -26,9 +26,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class StartingPoints extends Activity {
 
@@ -43,6 +46,10 @@ public class StartingPoints extends Activity {
     public StartingPoints(Context context){
         starting_points_list = new HashMap<String,  ArrayList>();
         this.context = context;
+    }
+
+    public boolean isStartingPointsListEmpty(){
+        return this.starting_points_list == null || this.starting_points_list != null && this.starting_points_list.isEmpty();
     }
 
     public static String getCreateTable() {
@@ -99,4 +106,52 @@ public class StartingPoints extends Activity {
         String[] whereArgs = new String[] { name };
         db.delete(this.SP_TABLE_NAME, whereClause, whereArgs);
     }
+
+    public boolean matchingWithPosition(HashMap points, double[] coordinates){
+        boolean matching = false;
+        boolean success;
+        Iterator it = points.entrySet().iterator();
+
+        ArrayList<Double> spCoordinates;
+        double spLat, spLon;
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+
+            try {
+                spCoordinates = (ArrayList)pair.getValue();
+
+                spLat=(Double) spCoordinates.get(0);
+                Log.e("CREATE", "matchingPositionWithSP get lat "+spLat);
+                spLon=(Double) spCoordinates.get(1);
+                Log.e("CREATE", "matchingPositionWithSP get lon "+spLon);
+                success=this.compareCoordinates(coordinates[0], coordinates[1], spLat, spLon);
+                if(success){
+                    matching=true;
+                    break;
+                }
+
+            }catch (ClassCastException e){
+                e.printStackTrace();
+            }
+
+            it.remove();
+        }
+        return matching;
+    }
+
+    private boolean compareCoordinates(double currentLat, double currentLon, double spLat, double spLon){
+        boolean equal = false;
+        double distance = 0.001;
+        Log.e("CREATE", "culat "+currentLat+" cuLon "+currentLon+" spLa "+spLat+" spLo "+spLon);
+        if(currentLat + distance > spLat && currentLat - distance < spLat){
+            Log.e("CREATE", "Match lat");
+            if(currentLon + distance > spLon && currentLon - distance < spLon) {
+                Log.e("CREATE", "Match lon");
+                equal = true;
+            }
+        }
+        return equal;
+    }
+
 }

@@ -58,6 +58,15 @@ public class StartingPointActivity extends Activity implements MyCallback{
         activateAllFeatures();
         fillListView();
         getCoordinates();
+
+        if(!this.starting_points.isStartingPointsListEmpty()){
+            this.hideLayoutInfoHelper();
+        }
+    }
+
+    private void hideLayoutInfoHelper(){
+        LinearLayout lyt_about = (LinearLayout) findViewById(R.id.layout_layout_sp_explanation);
+        lyt_about.setVisibility(View.GONE);
     }
 
     private void fillListView() {
@@ -126,12 +135,13 @@ public class StartingPointActivity extends Activity implements MyCallback{
         EditText inpt_add_name_starting_point = (EditText) findViewById(R.id.type_current_position_name_input);
         LinearLayout lyt_back_button = (LinearLayout) findViewById(R.id.bottom_bar_back);
         LinearLayout lyt_about = (LinearLayout) findViewById(R.id.bottom_bar_about);
+        LinearLayout lyt_helper = (LinearLayout) findViewById(R.id.layout_layout_sp_explanation);
 
         lyt_back_button.setOnClickListener(initialScreenHandler);
         lyt_about.setOnClickListener(initialScreenHandler);
 
         button_save.setOnClickListener(initialScreenHandler);
-
+        lyt_helper.setOnClickListener(initialScreenHandler);
         inpt_add_name_starting_point.setOnFocusChangeListener(focusChangeListener);
     }
 
@@ -211,6 +221,9 @@ public class StartingPointActivity extends Activity implements MyCallback{
                 case R.id.layout_save_current_position_button:
                     savePosition();
                     hideKeyboard(v);
+                    break;
+                case R.id.layout_layout_sp_explanation:
+                    hideLayoutInfoHelper();
                     break;
            }
         }

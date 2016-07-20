@@ -45,7 +45,7 @@
     </LinearLayout>
     <LinearLayout
         android:id="@+id/layout_loading_first_time"
-        style="@style/layoutLoadingFirstTimeText"
+        style="@style/layoutInfoHelper"
         android:visibility="visible"
         android:background="@color/grey_layout">
         <LinearLayout

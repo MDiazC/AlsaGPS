@@ -32,6 +32,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 
 public class GPSSystem extends Service implements LocationListener {
 
@@ -159,7 +160,7 @@ public class GPSSystem extends Service implements LocationListener {
      * */
     public void showSettingsAlert(){
 
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogCustom));
 
         // Setting Dialog Title
         alertDialog.setTitle("GPS is settings");

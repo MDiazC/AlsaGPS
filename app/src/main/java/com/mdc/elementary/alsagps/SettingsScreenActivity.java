@@ -21,9 +21,12 @@ package com.mdc.elementary.alsagps;
 */
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -177,18 +180,62 @@ public class SettingsScreenActivity extends Activity {
     private void saveOptions(){
         EditText edtTxt_frequency = (EditText) findViewById(R.id.location_frequency_input);
         EditText edtTxt_time = (EditText) findViewById(R.id.input_time_warn);
+
         if(edtTxt_frequency.getVisibility() == View.VISIBLE){
-            String frequency = edtTxt_frequency.getText().toString();
-            if(!frequency.equals("")){
-                internal_params.setFrequency(Integer.parseInt(frequency));
-            }
+            this.saveFrequency(edtTxt_frequency);
         }
         if(edtTxt_time.getVisibility() == View.VISIBLE){
-            String time = edtTxt_time.getText().toString();
-            if(!time.equals("")){
-                internal_params.setTimeWarn(Integer.parseInt(time));
-            }
+            this.saveTimeWarn(edtTxt_time);
         }
+    }
+
+    private void saveTimeWarn(EditText edtTxt_time) {
+        int time = 6;
+        try {
+            time = Integer.parseInt(edtTxt_time.getText().toString());
+        }catch (Exception e){
+            time=10;
+            e.printStackTrace();
+        }
+        if(time > 1 && time < 20){
+            internal_params.setTimeWarn(time);
+        }else{
+            this.showOptionsAlert("Error setting time warn", "The time period you selected is invalid, please select another");
+        }
+    }
+
+    private void saveFrequency(EditText edtTxt_frequency) {
+        int frequency=10;
+        try {
+            frequency = Integer.parseInt(edtTxt_frequency.getText().toString());
+        }catch (Exception e){
+            frequency=10;
+            e.printStackTrace();
+        }
+        if(frequency > 1 && frequency < 60){
+            this.internal_params.setFrequency(frequency);
+        }else{
+            this.showOptionsAlert("Error setting frequency", "The time period you selected is invalid, please select another");
+        }
+    }
+
+    private void showOptionsAlert(String title, String msg){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+
+        // Setting Dialog Title
+        alertDialog.setTitle(title);
+
+        // Setting Dialog Message
+        alertDialog.setMessage(msg);
+
+        alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog.show();
     }
 
     private void hideKeyboard(View v) {

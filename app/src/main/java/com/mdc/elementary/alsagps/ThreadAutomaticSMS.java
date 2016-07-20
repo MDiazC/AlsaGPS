@@ -60,9 +60,6 @@ public class ThreadAutomaticSMS extends Thread implements Parcelable {
     }
 
     private void sendSMS(){
-        GPSPartial gps = new GPSPartial(this.context);
-        gps.showAllPositions();
-
         SMSSystem sms = new SMSSystem(this.context);
         sms.sendAutomaticSMS();
 

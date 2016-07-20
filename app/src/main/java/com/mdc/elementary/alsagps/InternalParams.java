@@ -43,7 +43,7 @@ public class InternalParams{
     public InternalParams(Context context){
         time_warn = 6;
         frequency = 10;
-        message = null;
+        message = "";
         this.context=context;
     }
 
@@ -68,7 +68,7 @@ public class InternalParams{
         return (this.message != null && !this.message.isEmpty())?this.message:"";
     }
 
-    public void setTimeWarn(Integer new_time){
+    public void setTimeWarn(int new_time){
         if(new_time > 0) {
             this.time_warn = new_time;
             this.updateParams();
@@ -76,7 +76,7 @@ public class InternalParams{
         }
     }
 
-    public void setFrequency(Integer new_frequency){
+    public void setFrequency(int new_frequency){
         if(new_frequency > 0) {
             this.frequency = new_frequency;
             this.updateParams();
@@ -102,9 +102,9 @@ public class InternalParams{
 
             if (cursor.moveToFirst()) {
                 do {
-                    time_warn = Integer.valueOf(cursor.getString(cursor.getColumnIndex(PARAMS_COLUMN_TIME_WARN)));
-                    frequency = Integer.valueOf(cursor.getString(cursor.getColumnIndex(PARAMS_COLUMN_LOCATION_FREQUENCY)));
-                    message = cursor.getString(cursor.getColumnIndex(PARAMS_COLUMN_PERSONAL_MESSAGE));
+                    this.time_warn = Integer.valueOf(cursor.getString(cursor.getColumnIndex(PARAMS_COLUMN_TIME_WARN)));
+                    this.frequency = Integer.valueOf(cursor.getString(cursor.getColumnIndex(PARAMS_COLUMN_LOCATION_FREQUENCY)));
+                    this.message = cursor.getString(cursor.getColumnIndex(PARAMS_COLUMN_PERSONAL_MESSAGE));
                      isEmptyTable=false;
                 } while (cursor.moveToNext());
             }
@@ -127,7 +127,7 @@ public class InternalParams{
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(PARAMS_COLUMN_LOCATION_FREQUENCY, this.frequency);
-        message = this.escapeString(message);
+        this.message = this.escapeString(this.message);
         contentValues.put(PARAMS_COLUMN_PERSONAL_MESSAGE, this.message);
         contentValues.put(PARAMS_COLUMN_TIME_WARN, this.time_warn);
         db.update(PARAMS_TABLE_NAME, contentValues, "id = ? ", new String[] { "1" } );

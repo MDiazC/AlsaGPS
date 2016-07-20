@@ -27,6 +27,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import java.util.HashMap;
+
 public class ThreadTrackCoordinates extends Thread implements Parcelable {
     Context context;
     GPSSystem gps;
@@ -45,18 +47,35 @@ public class ThreadTrackCoordinates extends Thread implements Parcelable {
             this.gps.getLocation();
             double latitude = this.gps.getLatitude();
             double longitude = this.gps.getLongitude();
-            GPSPartial gps_partial = new GPSPartial(this.context);
-            gps_partial.insertPosition(latitude,longitude);
-            Log.e("CREATE", "Your Location is - \nLat: " + latitude + "\nLong: " + longitude);
+            this.savePartialPosition(latitude, longitude);
+
+            boolean matching = this.comparePositionWithStartingPoints(latitude, longitude);
+            if(!matching){
+                InternalParams ip = new InternalParams(this.context);
+                ip.loadParams();
+                mHandler.postDelayed(this, ip.getFrequency());
+            }
 
         }catch(Exception e){
-
-        } finally {
-            InternalParams ip = new InternalParams(this.context);
-            ip.loadParams();
-            mHandler.postDelayed(this, ip.getFrequency());
+            e.printStackTrace();
         }
     }
+
+    private boolean comparePositionWithStartingPoints(double latitude, double longitude) {
+        double [] coordinates = {latitude,longitude};
+        StartingPoints sp = new StartingPoints(this.context);
+        sp.loadStartingPoints();
+        HashMap points = sp.getStartingPoints();
+
+        return sp.matchingWithPosition(points, coordinates);
+    }
+
+    private void savePartialPosition(double latitude, double longitude) {
+        GPSPartial gps_partial = new GPSPartial(this.context);
+        gps_partial.insertPosition(latitude,longitude);
+        Log.e("CREATE", "Your Location is - \nLat: " + latitude + "\nLong: " + longitude);
+    }
+
     public void stopThread(){
         Log.e("CREATE", "Stop GPS");
         GPSPartial gps_partial = new GPSPartial(this.context);

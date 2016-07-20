@@ -126,7 +126,20 @@
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>
+    <LinearLayout
+        android:id="@+id/layout_layout_sp_explanation"
+        style="@style/layoutInfoHelper"
+        android:visibility="visible"
+        android:background="@color/grey_layout">
+        <LinearLayout
+            android:id="@+id/layout_sp_explanation"
+            style="@style/layoutBlankFirstTime">
 
+            <TextView
+                android:id="@+id/loading_welcome_first_time"
+                style="@style/SPExplanation"/>
+        </LinearLayout>
+    </LinearLayout>
     <!-- BOTTOM BAR -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/backBottomBar"

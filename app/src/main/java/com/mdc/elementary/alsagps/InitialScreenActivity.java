@@ -26,6 +26,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -162,40 +163,49 @@ public class InitialScreenActivity extends Activity implements MyCallback{
                     this.showStartingPointsAlert();
                     changeOnOffButton();
                     activateAllFeatures();
-                }else{
-                    GPSSystem gps = new GPSSystem(this);
-                    if(gps.canGetLocation()){
-                        Log.e("CREATE", "activateApp");
-                        this.threadGPS = new ThreadTrackCoordinates(this, gps);
-                        this.threadGPS.run();
-                        this.threadSMS = new ThreadAutomaticSMS(this);
-                        this.threadSMS.callback = this;
-                        this.threadSMS.run();
-                        this.areThreadsLaunched=true;
-                    }else {
-                        this.appActivated = false;
-                        gps.showSettingsAlert();
-                        changeOnOffButton();
-                        activateAllFeatures();
-                    }
-                    gps.stopUsingGPS();
-                    gps=null;
+                }else {
+                    this.startThreads();
                 }
             }
         }
     }
 
+    private void startThreads(){
+        GPSSystem gps = new GPSSystem(this);
+        if(gps.canGetLocation()){
+            Log.e("CREATE", "activateApp");
+            this.threadGPS = new ThreadTrackCoordinates(this, gps);
+            this.threadGPS.run();
+            this.threadSMS = new ThreadAutomaticSMS(this);
+            this.threadSMS.callback = this;
+            this.threadSMS.run();
+            this.areThreadsLaunched=true;
+        }else {
+            this.appActivated = false;
+            gps.showSettingsAlert();
+            changeOnOffButton();
+            activateAllFeatures();
+        }
+        gps.stopUsingGPS();
+        gps=null;
+    }
+
     private void showStartingPointsAlert(){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
 
         // Setting Dialog Title
         alertDialog.setTitle("Starting points");
 
         // Setting Dialog Message
-        alertDialog.setMessage("You new to set a starting point before activating the app");
+        alertDialog.setMessage("In order to not send unnecesary messages, you should set a starting point");
 
         // On pressing Settings button
-        alertDialog.setPositiveButton("Starting points", new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton("Active the app", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                startThreads();
+            }
+        });
+        alertDialog.setPositiveButton("Go to Starting points", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 Intent intentMainStartingPoints = new Intent(InitialScreenActivity.this ,StartingPointActivity.class);
                 InitialScreenActivity.this.startActivity(intentMainStartingPoints);

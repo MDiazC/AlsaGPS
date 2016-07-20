@@ -190,9 +190,9 @@ public class ContactsScreenActivity extends Activity{
         LinearLayout lyt_contact_added = (LinearLayout) findViewById(R.id.layout_layout_contact_removed);
 
         ObjectAnimator fadeOut = ObjectAnimator.ofFloat(lyt_contact_added, "alpha",  1f, 0f);
-        fadeOut.setDuration(2000);
+        fadeOut.setDuration(3000);
         ObjectAnimator fadeIn = ObjectAnimator.ofFloat(lyt_contact_added, "alpha", 0f, 1f);
-        fadeIn.setDuration(2000);
+        fadeIn.setDuration(500);
 
         final AnimatorSet mAnimationSet = new AnimatorSet();
         mAnimationSet.play(fadeOut).after(fadeIn);
