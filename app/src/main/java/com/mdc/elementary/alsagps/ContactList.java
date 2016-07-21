@@ -123,6 +123,7 @@ public class ContactList{
             Cursor cursor = db.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
                 do {
+                    Log.e("CREATE","Loadcl ket: "+cursor.getString(cursor.getColumnIndex(CONTACTS_COLUMN_NAME))+" val "+cursor.getString(cursor.getColumnIndex(CONTACTS_COLUMN_PHONE)));
                     this.contacts_list.put(cursor.getString(cursor.getColumnIndex(CONTACTS_COLUMN_NAME)), cursor.getString(cursor.getColumnIndex(CONTACTS_COLUMN_PHONE)));
                 } while (cursor.moveToNext());
             }

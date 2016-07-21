@@ -50,10 +50,10 @@ public class GPSPartial  extends Activity {
         return "DROP TABLE IF EXISTS "+ GPSP_TABLE_NAME;
     }
 
-    public float getCurrentLatitude(){
+    public float getLastPartialLatitude(){
         return this.latitude;
     }
-    public float getCurrentLongitude(){
+    public float getLastPartialLongitude(){
         return this.longitude;
     }
 

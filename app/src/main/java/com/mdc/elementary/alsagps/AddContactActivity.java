@@ -26,6 +26,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -119,6 +120,7 @@ public class AddContactActivity  extends Activity {
             try {
                 numberContact = (String) pair.getValue();
                 nameContact = (String)pair.getKey();
+                Log.e("CREATE","add contact key:"+numberContact+" val:'"+nameContact+"'\n");
             }catch (ClassCastException e){
                 e.printStackTrace();
             }
@@ -145,7 +147,7 @@ public class AddContactActivity  extends Activity {
         if(!isAlreadyInserted(nameContact, numberContact, cl)){
             contact = new Contact();
             contact.setName(nameContact);
-            contact.setNumber(nameContact);
+            contact.setNumber(numberContact);
             array_list.add(contact);
         }
         return array_list;

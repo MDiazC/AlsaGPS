@@ -49,7 +49,7 @@ public class StartingPoints extends Activity {
     }
 
     public boolean isStartingPointsListEmpty(){
-        return this.starting_points_list == null || this.starting_points_list != null && this.starting_points_list.isEmpty();
+        return this.starting_points_list == null || (this.starting_points_list != null && this.starting_points_list.isEmpty());
     }
 
     public static String getCreateTable() {
@@ -107,9 +107,13 @@ public class StartingPoints extends Activity {
         db.delete(this.SP_TABLE_NAME, whereClause, whereArgs);
     }
 
-    public boolean matchingWithPosition(HashMap points, double[] coordinates){
+    public boolean matchingWithPosition(double[] coordinates){
         boolean matching = false;
         boolean success;
+
+        this.loadStartingPoints();
+        HashMap points = this.getStartingPoints();
+
         Iterator it = points.entrySet().iterator();
 
         ArrayList<Double> spCoordinates;

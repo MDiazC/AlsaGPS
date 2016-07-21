@@ -69,19 +69,13 @@ public class InternalParams{
     }
 
     public void setTimeWarn(int new_time){
-        if(new_time > 0) {
-            this.time_warn = new_time;
-            this.updateParams();
-            //@todo Si hay excepción hay que setear el valor anterior
-        }
+        this.time_warn = new_time;
+        this.updateParams();
     }
 
     public void setFrequency(int new_frequency){
-        if(new_frequency > 0) {
-            this.frequency = new_frequency;
-            this.updateParams();
-            //@todo Si hay excepción hay que setear el valor anterior
-        }
+        this.frequency = new_frequency;
+        this.updateParams();
     }
 
     public void setPersonalMessage(String new_message){

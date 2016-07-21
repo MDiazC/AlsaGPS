@@ -47,7 +47,7 @@ public class ThreadAutomaticSMS extends Thread implements Parcelable {
                 public void run() {
                     sendSMS();
                 }
-            }, ip.getTimeWarn()*60*60);
+            }, ip.getTimeWarn()*60*60*1000);
         }catch(Exception e){
             Log.e("CREATE", "Exception in ThreadAutomaticSMS");
             e.printStackTrace();

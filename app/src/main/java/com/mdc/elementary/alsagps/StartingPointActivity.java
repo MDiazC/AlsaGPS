@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -59,8 +60,16 @@ public class StartingPointActivity extends Activity implements MyCallback{
         fillListView();
         getCoordinates();
 
+        if(this.starting_points.isStartingPointsListEmpty())
+            Log.e("CREATE", "SP vacio");
+        else
+            Log.e("CREATE", "SP lleno");
+
+        Log.e("CREATE", "numero de elemente "+this.starting_points.getStartingPoints().size());
+
         if(!this.starting_points.isStartingPointsListEmpty()){
             this.hideLayoutInfoHelper();
+            Log.e("CREATE","Starting pint list no vacia");
         }
     }
 
@@ -103,6 +112,7 @@ public class StartingPointActivity extends Activity implements MyCallback{
 
     private List<String> getStartingPoints(){
         HashMap points = this.starting_points.getStartingPoints();
+        Log.e("CREATE","asda "+points.size());
         ArrayList<String> list_names = new ArrayList<String>();
 
         Iterator it = points.entrySet().iterator();
@@ -117,10 +127,7 @@ public class StartingPointActivity extends Activity implements MyCallback{
                 e.printStackTrace();
             }
             list_names.add(nameContact);
-
-            it.remove();
         }
-
         return list_names;
     }
 

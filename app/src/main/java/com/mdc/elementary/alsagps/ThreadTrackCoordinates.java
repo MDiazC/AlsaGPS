@@ -32,11 +32,13 @@ import java.util.HashMap;
 public class ThreadTrackCoordinates extends Thread implements Parcelable {
     Context context;
     GPSSystem gps;
+    boolean first_time;
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     public ThreadTrackCoordinates(Context cntxt, GPSSystem gps) {
         this.gps = gps;
         this.context = cntxt;
+        this.first_time=true;
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
     }
 
@@ -44,18 +46,34 @@ public class ThreadTrackCoordinates extends Thread implements Parcelable {
         try {
             //Thread.sleep(3000);
             Log.e("CREATE", "Run GPS");
-            this.gps.getLocation();
-            double latitude = this.gps.getLatitude();
-            double longitude = this.gps.getLongitude();
-            this.savePartialPosition(latitude, longitude);
+            if(!this.first_time) {
+                this.gps.getLocation();
+                double latitude = this.gps.getLatitude();
+                double longitude = this.gps.getLongitude();
 
-            boolean matching = this.comparePositionWithStartingPoints(latitude, longitude);
-            if(!matching){
-                InternalParams ip = new InternalParams(this.context);
-                ip.loadParams();
-                mHandler.postDelayed(this, ip.getFrequency());
+                GPSPartial gpsP = new GPSPartial(this.context);
+                gpsP.loadLastPosition();
+                double prevLat = gpsP.getLastPartialLatitude();
+                double prevLon = gpsP.getLastPartialLongitude();
+
+                if(!this.sameCoordinates(latitude, longitude, prevLat, prevLon)){
+
+                    this.savePartialPosition(latitude, longitude);
+
+                    boolean matching = this.comparePositionWithStartingPoints(latitude, longitude);
+                    if (!matching) {
+                        InternalParams ip = new InternalParams(this.context);
+                        ip.loadParams();
+                        mHandler.postDelayed(this, ip.getFrequency() * 60 *1000);
+                    }
+                }else {
+                    InternalParams ip = new InternalParams(this.context);
+                    ip.loadParams();
+                    mHandler.postDelayed(this, ip.getFrequency() * 60 *1000);
+                }
+            }else {
+                this.first_time=false;
             }
-
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -64,10 +82,7 @@ public class ThreadTrackCoordinates extends Thread implements Parcelable {
     private boolean comparePositionWithStartingPoints(double latitude, double longitude) {
         double [] coordinates = {latitude,longitude};
         StartingPoints sp = new StartingPoints(this.context);
-        sp.loadStartingPoints();
-        HashMap points = sp.getStartingPoints();
-
-        return sp.matchingWithPosition(points, coordinates);
+        return sp.matchingWithPosition(coordinates);
     }
 
     private void savePartialPosition(double latitude, double longitude) {
@@ -84,6 +99,20 @@ public class ThreadTrackCoordinates extends Thread implements Parcelable {
         this.gps=null;
         mHandler.removeCallbacks(this);
         mHandler.removeCallbacksAndMessages(null);
+    }
+
+    private boolean sameCoordinates(double currentLat, double currentLon, double prevLat, double prevLon){
+        boolean equal = false;
+        double distance = 0.001;
+        Log.e("CREATE", "culat "+currentLat+" cuLon "+currentLon+" spLa "+prevLat+" spLo "+prevLon);
+        if(currentLat + distance > prevLat && currentLat - distance < prevLat){
+            Log.e("CREATE", "Match lat");
+            if(currentLon + distance > prevLon && currentLon - distance < prevLon) {
+                Log.e("CREATE", "Match lon");
+                equal = true;
+            }
+        }
+        return equal;
     }
 
     // Parcelable functions

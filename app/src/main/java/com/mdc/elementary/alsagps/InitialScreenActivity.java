@@ -138,7 +138,7 @@ public class InitialScreenActivity extends Activity implements MyCallback{
                     appActivated = false;
                     changeOnOffButton();
                     activateAllFeatures();
-                    deactivateApp();
+                    deactivateThreads();
                     break;
                 case R.id.help_button_on:
                     sendSMSManually();
@@ -150,6 +150,7 @@ public class InitialScreenActivity extends Activity implements MyCallback{
     private void sendSMSManually(){
         SMSSystem sms = new SMSSystem(this);
         sms.sendSMS();
+        this.stopApp();
     }
 
     private void activateApp(){
@@ -159,10 +160,8 @@ public class InitialScreenActivity extends Activity implements MyCallback{
                 StartingPoints sp = new StartingPoints(this);
                 sp.loadStartingPoints();
                 if(sp.getStartingPoints() == null || sp.getStartingPoints().isEmpty()){
-                    this.appActivated = false;
+                    this.stopApp();
                     this.showStartingPointsAlert();
-                    changeOnOffButton();
-                    activateAllFeatures();
                 }else {
                     this.startThreads();
                 }
@@ -181,10 +180,8 @@ public class InitialScreenActivity extends Activity implements MyCallback{
             this.threadSMS.run();
             this.areThreadsLaunched=true;
         }else {
-            this.appActivated = false;
+            this.stopApp();
             gps.showSettingsAlert();
-            changeOnOffButton();
-            activateAllFeatures();
         }
         gps.stopUsingGPS();
         gps=null;
@@ -202,6 +199,9 @@ public class InitialScreenActivity extends Activity implements MyCallback{
         // On pressing Settings button
         alertDialog.setNegativeButton("Active the app", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
+                appActivated=true;
+                changeOnOffButton();
+                activateAllFeatures();
                 startThreads();
             }
         });
@@ -216,7 +216,7 @@ public class InitialScreenActivity extends Activity implements MyCallback{
         alertDialog.show();
     }
 
-    private void deactivateApp(){
+    private void deactivateThreads(){
         this.areThreadsLaunched= false;
         Log.e("CREATE", "deactivateApp");
         if(this.threadGPS != null) {
@@ -231,7 +231,7 @@ public class InitialScreenActivity extends Activity implements MyCallback{
 
     public void stopApp(){
         this.appActivated = false;
-        this.deactivateApp();
+        this.deactivateThreads();
         this.changeOnOffButton();
         this.activateAllFeatures();
     }
