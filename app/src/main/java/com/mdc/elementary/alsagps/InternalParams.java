@@ -61,6 +61,7 @@ public class InternalParams{
     }
 
     public Integer getFrequency(){
+        //return 2;
         return this.frequency;
     }
 

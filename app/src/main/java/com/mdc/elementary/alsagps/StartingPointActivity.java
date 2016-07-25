@@ -21,10 +21,14 @@ package com.mdc.elementary.alsagps;
 */
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -40,7 +44,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class StartingPointActivity extends Activity implements MyCallback{
+public class StartingPointActivity extends Activity implements CustomCallback{
     private StartingPoints starting_points = null;
     ArrayAdapter<String> arrayAdapter=null;
     ThreadUpdateCoordsSP updateCoords;
@@ -198,10 +202,51 @@ public class StartingPointActivity extends Activity implements MyCallback{
             this.updateCoords.callback = this;
             this.updateCoords.run();
         }else{
-            gps.showSettingsAlert();
+            this.showSettingsAlert();
         }
         gps.stopUsingGPS();
         gps=null;
+    }
+
+    private void openSettingsScreen() {
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        this.startActivity(intent);
+    }
+
+    /**
+     * Function to show settings alert dialog
+     * On pressing Settings button will lauch Settings Options
+     * */
+    public void showSettingsAlert(){
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+
+        // Setting Dialog Title
+        alertDialog.setTitle("GPS is settings");
+
+        // Setting Dialog Message
+        alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
+
+        // On pressing Settings button
+        alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                openSettingsScreen();
+            }
+        });
+
+        // on pressing cancel button
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        // Showing Alert Message
+        try {
+            alertDialog.show();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
@@ -247,5 +292,7 @@ public class StartingPointActivity extends Activity implements MyCallback{
     }
 
     @Override
-    public void stopApp(){}
+    public void errorInService(String key,String error){}
+    @Override
+    public void serviceFinished(boolean result){}
 }

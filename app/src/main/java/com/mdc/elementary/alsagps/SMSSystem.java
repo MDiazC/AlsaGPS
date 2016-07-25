@@ -47,7 +47,7 @@ public class SMSSystem {
         context=cntxt;
     }
 
-    public void sendSMS(){
+    public boolean sendSMS() throws Exception{
         boolean result=false;
 
         ContactList contact_list = new ContactList(this.context);
@@ -56,15 +56,14 @@ public class SMSSystem {
         try {
             String message = this.buildMessage();
             result = this.collectInfoAndSend(cl, message);
+            if(!result){
+                throw new Exception("We couldn't send the SMS to some of the contacts");
+            }
         }catch (Exception e){
             e.printStackTrace();
-            this.showCoordsErrorAlert();
+            throw new Exception("We couldn't gather the coordinates, we couldn't send the SMS");
         }
-        if(result){
-            this.showSuccessAlert();
-        }else {
-            this.showProblemSendAlert();
-        }
+        return result;
     }
 
     private String buildMessage() throws Exception{
@@ -114,7 +113,7 @@ public class SMSSystem {
         return owner_info;
     }
 
-    private boolean collectInfoAndSend(HashMap cl, String SMSmessage) throws Exception{
+    private boolean collectInfoAndSend(HashMap cl, String SMSmessage){
         String contactNumber="";
         boolean result = true;
         Iterator it = cl.entrySet().iterator();
@@ -174,46 +173,16 @@ public class SMSSystem {
         return coordinates;
     }
 
-    public void sendAutomaticSMS(){
+    public boolean sendAutomaticSMS() throws Exception{
+        boolean result=false;
         double [] coordinates = this.getCoordinates();
         StartingPoints sp = new StartingPoints(this.context);
 
         boolean matching = sp.matchingWithPosition(coordinates);
         if(!matching){
-            this.sendSMS();
+            result=this.sendSMS();
         }
+        return result;
     }
 
-    private void showSettingsAlert(String msg){
-
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(this.context, R.style.AlertDialogCustom));
-
-        // Setting Dialog Title
-        alertDialog.setTitle("SMS system ");
-
-        // Setting Dialog Message
-        alertDialog.setMessage(msg);
-
-        // On pressing Settings button
-        alertDialog.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
-                dialog.cancel();
-            }
-        });
-
-        // Showing Alert Message
-        alertDialog.show();
-    }
-
-    private void showCoordsErrorAlert(){
-        this.showSettingsAlert("We couldn't gather the coordinates, que couldn't send the SMS");
-    }
-
-    private void showProblemSendAlert(){
-        this.showSettingsAlert("We couldn't send the SMS to some of the contacts");
-    }
-
-    private void showSuccessAlert(){
-        this.showSettingsAlert("SMS messages sent!");
-    }
 }

@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
             this.firstTimeBehaviour(iac);
         }
         else{
-            startApp();
             Thread updateAgendaContactsThread = new Thread() {
                 @Override
                 public void run() {
@@ -59,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
             updateAgendaContactsThread.start();
+            startApp();
         }
     }
 
@@ -99,9 +99,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startApp(){
-        Intent intentMain = new Intent(MainActivity.this , InitialScreenActivity.class);
-        MainActivity.this.startActivity(intentMain);
-        finish();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intentMain = new Intent(MainActivity.this , InitialScreenActivity.class);
+                MainActivity.this.startActivity(intentMain);
+                finish();
+            }
+        }, 5000);
     }
 
     View.OnClickListener initialScreenHandler = new View.OnClickListener(){

@@ -20,19 +20,24 @@ package com.mdc.elementary.alsagps;
 
 */
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 
 import java.util.HashMap;
 
-public class ThreadTrackCoordinates extends Thread implements Parcelable {
+public class ThreadTrackCoordinates extends Thread{
     Context context;
     GPSSystem gps;
     boolean first_time;
+    CustomCallback callback;
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     public ThreadTrackCoordinates(Context cntxt, GPSSystem gps) {
@@ -46,6 +51,7 @@ public class ThreadTrackCoordinates extends Thread implements Parcelable {
         try {
             //Thread.sleep(3000);
             Log.e("CREATE", "Run GPS");
+            InternalParams ip = new InternalParams(this.context);
             if(!this.first_time) {
                 this.gps.getLocation();
                 double latitude = this.gps.getLatitude();
@@ -56,26 +62,26 @@ public class ThreadTrackCoordinates extends Thread implements Parcelable {
                 double prevLat = gpsP.getLastPartialLatitude();
                 double prevLon = gpsP.getLastPartialLongitude();
 
-                if(!this.sameCoordinates(latitude, longitude, prevLat, prevLon)){
+                Log.e("CREATE", "Run GPS"+latitude);
 
+                ip.loadParams();
+
+                if(!this.sameCoordinates(latitude, longitude, prevLat, prevLon)){
                     this.savePartialPosition(latitude, longitude);
 
                     boolean matching = this.comparePositionWithStartingPoints(latitude, longitude);
-                    if (!matching) {
-                        InternalParams ip = new InternalParams(this.context);
-                        ip.loadParams();
-                        mHandler.postDelayed(this, ip.getFrequency() * 60 *1000);
+                    if (matching) {
+                        Log.e("CREATE","Finis en thread track");
+                        callback.serviceFinished(false);
                     }
-                }else {
-                    InternalParams ip = new InternalParams(this.context);
-                    ip.loadParams();
-                    mHandler.postDelayed(this, ip.getFrequency() * 60 *1000);
                 }
             }else {
                 this.first_time=false;
             }
+            mHandler.postDelayed(this, ip.getFrequency() * 60 *1000);
         }catch(Exception e){
-            e.printStackTrace();
+            Log.e("CREATE", "Error en ThreadTrackCoordinates "+e.getMessage());
+            callback.errorInService("Track Thread", "There is a problem with the tracking system "+e.getMessage());
         }
     }
 
@@ -113,35 +119,6 @@ public class ThreadTrackCoordinates extends Thread implements Parcelable {
             }
         }
         return equal;
-    }
-
-    // Parcelable functions
-
-    private int mData;
-
-    public int describeContents() {
-        return 0;
-    }
-
-    /** save object in parcel */
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeInt(mData);
-    }
-
-    public static final Parcelable.Creator<ThreadTrackCoordinates> CREATOR
-            = new Parcelable.Creator<ThreadTrackCoordinates>() {
-        public ThreadTrackCoordinates createFromParcel(Parcel in) {
-            return new ThreadTrackCoordinates(in);
-        }
-
-        public ThreadTrackCoordinates[] newArray(int size) {
-            return new ThreadTrackCoordinates[size];
-        }
-    };
-
-    /** recreate object from parcel */
-    private ThreadTrackCoordinates(Parcel in) {
-        mData = in.readInt();
     }
 }
 

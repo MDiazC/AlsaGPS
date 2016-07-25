@@ -25,7 +25,7 @@ import android.os.Looper;
 import android.util.Log;
 
 public class ThreadUpdateCoordsSP extends Thread {
-    MyCallback callback;
+    CustomCallback callback;
     GPSSystem gps;
     private Handler mHandler = new Handler(Looper.getMainLooper());
 

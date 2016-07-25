@@ -59,7 +59,7 @@ public class GPSPartial  extends Activity {
 
     public void loadLastPosition(){
         DBHelper dbh = new DBHelper(this.context);
-        String selectQuery =  "SELECT "+this.latitude+", "+this.longitude+" FROM " +this.GPSP_TABLE_NAME+" ORDER BY "+this.GPSP_COLUMN_TIMESTAMP+" DESC LIMIT 1";
+        String selectQuery =  "SELECT "+GPSP_COLUMN_LATITUDE+", "+GPSP_COLUMN_LONGITUDE+" FROM " +GPSP_TABLE_NAME+" ORDER BY "+GPSP_COLUMN_TIMESTAMP+" DESC LIMIT 1";
 
         try{
             SQLiteDatabase db =dbh.get(selectQuery);
@@ -85,7 +85,7 @@ public class GPSPartial  extends Activity {
 
         DBHelper db = new DBHelper(this.context);
         if(latitude != 0.0 && longitude != 0.0) {
-            id = db.insert(this.GPSP_TABLE_NAME, contentValues);
+            id = db.insert(GPSP_TABLE_NAME, contentValues);
         }
         return id;
 
@@ -95,12 +95,12 @@ public class GPSPartial  extends Activity {
         DBHelper db = new DBHelper(this.context);
         String whereClause=" "+GPSP_COLUMN_TIMESTAMP+" < datetime('now', '-1 week')";
         String[] whereArgs = new String[] {};
-        db.delete(this.GPSP_TABLE_NAME, whereClause, whereArgs);
+        db.delete(GPSP_TABLE_NAME, whereClause, whereArgs);
     }
 
     public void showAllPositions(){
         DBHelper dbh = new DBHelper(this.context);
-        String selectQuery =  "SELECT "+this.GPSP_COLUMN_LATITUDE+", "+this.GPSP_COLUMN_LONGITUDE+" FROM " +this.GPSP_TABLE_NAME+" ORDER BY "+this.GPSP_COLUMN_TIMESTAMP+" DESC";
+        String selectQuery =  "SELECT "+GPSP_COLUMN_LATITUDE+", "+GPSP_COLUMN_LONGITUDE+" FROM " +GPSP_TABLE_NAME+" ORDER BY "+GPSP_COLUMN_TIMESTAMP+" DESC";
         float lat , lon;
         int i =0;
         try{

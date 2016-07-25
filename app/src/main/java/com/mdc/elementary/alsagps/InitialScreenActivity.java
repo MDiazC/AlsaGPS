@@ -25,19 +25,20 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-public class InitialScreenActivity extends Activity implements MyCallback{
+public class InitialScreenActivity extends Activity implements  AlertSystemReceiver.Receiver{
 
     private boolean appActivated=false;
     private ContactList contact_list=null;
-    ThreadTrackCoordinates threadGPS = null;
-    ThreadAutomaticSMS threadSMS = null;
     boolean areThreadsLaunched = false;
+    static Intent alertService ;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,7 +139,7 @@ public class InitialScreenActivity extends Activity implements MyCallback{
                     appActivated = false;
                     changeOnOffButton();
                     activateAllFeatures();
-                    deactivateThreads();
+                    stopAlertService();
                     break;
                 case R.id.help_button_on:
                     sendSMSManually();
@@ -147,9 +148,22 @@ public class InitialScreenActivity extends Activity implements MyCallback{
         }
     };
 
+    private void openSettingsScreen() {
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        this.startActivity(intent);
+    }
+
     private void sendSMSManually(){
         SMSSystem sms = new SMSSystem(this);
-        sms.sendSMS();
+        try{
+            boolean result= sms.sendSMS();
+            if(result){
+                Log.e("CREATE", "sendSMSManually");
+                this.showGenericAlert("SMS system", "SMS messages sent!");
+            }
+        }catch (Exception e){
+            this.showGenericAlert("SMS system", e.getMessage());
+        }
         this.stopApp();
     }
 
@@ -160,32 +174,15 @@ public class InitialScreenActivity extends Activity implements MyCallback{
                 StartingPoints sp = new StartingPoints(this);
                 sp.loadStartingPoints();
                 if(sp.getStartingPoints() == null || sp.getStartingPoints().isEmpty()){
-                    this.stopApp();
                     this.showStartingPointsAlert();
+                    this.stopApp();
                 }else {
-                    this.startThreads();
+                    this.startAlertService();
                 }
             }
         }
     }
 
-    private void startThreads(){
-        GPSSystem gps = new GPSSystem(this);
-        if(gps.canGetLocation()){
-            Log.e("CREATE", "activateApp");
-            this.threadGPS = new ThreadTrackCoordinates(this, gps);
-            this.threadGPS.run();
-            this.threadSMS = new ThreadAutomaticSMS(this);
-            this.threadSMS.callback = this;
-            this.threadSMS.run();
-            this.areThreadsLaunched=true;
-        }else {
-            this.stopApp();
-            gps.showSettingsAlert();
-        }
-        gps.stopUsingGPS();
-        gps=null;
-    }
 
     private void showStartingPointsAlert(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
@@ -202,7 +199,7 @@ public class InitialScreenActivity extends Activity implements MyCallback{
                 appActivated=true;
                 changeOnOffButton();
                 activateAllFeatures();
-                startThreads();
+                startAlertService();
             }
         });
         alertDialog.setPositiveButton("Go to Starting points", new DialogInterface.OnClickListener() {
@@ -216,36 +213,135 @@ public class InitialScreenActivity extends Activity implements MyCallback{
         alertDialog.show();
     }
 
-    private void deactivateThreads(){
-        this.areThreadsLaunched= false;
-        Log.e("CREATE", "deactivateApp");
-        if(this.threadGPS != null) {
-            this.threadGPS.stopThread();
-            this.threadGPS=null;
-        }
-        if(this.threadSMS != null) {
-            this.threadSMS.stopThread();
-            this.threadSMS = null;
+
+    /**
+     * Function to show settings alert dialog
+     * On pressing Settings button will lauch Settings Options
+     * */
+    public void showSettingsAlert(){
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+
+        // Setting Dialog Title
+        alertDialog.setTitle("GPS is settings");
+
+        // Setting Dialog Message
+        alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
+
+        // On pressing Settings button
+        alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                openSettingsScreen();
+            }
+        });
+
+        // on pressing cancel button
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        // Showing Alert Message
+        try {
+            alertDialog.show();
+        } catch(Exception e){
+            e.printStackTrace();
         }
     }
 
+    private void showGenericAlert(String key, String msg){
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+
+        // Setting Dialog Title
+        alertDialog.setTitle(key);
+
+        // Setting Dialog Message
+        alertDialog.setMessage(msg);
+
+        // On pressing Settings button
+        alertDialog.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                dialog.cancel();
+            }
+        });
+
+        // Showing Alert Message
+        try {
+            alertDialog.show();
+        } catch(Exception e){
+            Log.e("CREATE", "showGenericAlert "+e.getMessage());
+        }
+    }
+
+    private void startAlertService(){
+        AlertSystemReceiver mReceiver = new AlertSystemReceiver(new Handler());
+        mReceiver.setReceiver(this);
+
+        alertService = new Intent(this, AlertSystemService.class);
+        alertService.putExtra("receiver", mReceiver);
+        startService(alertService);
+
+        Log.e("CREATE", "Start service");
+    }
+
+    private void stopAlertService(){
+        Log.e("CREATE", "Stop service");
+        if(alertService != null)
+            stopService(alertService);
+
+    }
+
     public void stopApp(){
+        Log.e("CREATE","Stop app");
         this.appActivated = false;
-        this.deactivateThreads();
+        this.stopAlertService();
         this.changeOnOffButton();
         this.activateAllFeatures();
     }
 
     @Override
-    public void updateCoordinates(double latitude, double longitude){}
+    public void onReceiveResult(int resultCode, Bundle resultData) {
+        switch (resultCode) {
+            case AlertSystemService.STATUS_RUNNING:
+                setProgressBarIndeterminateVisibility(true);
+                break;
+            case AlertSystemService.STATUS_FINISHED:
+                String result = resultData.getString(Intent.EXTRA_KEY_EVENT);
+                if(result != null && result.equals("true"))
+                    this.showGenericAlert("SMS system", "SMS messages sent!");
+                break;
+            case AlertSystemService.STATUS_ERROR:
+                /* Handle the error */
+                String error = resultData.getString("GPS");
+                if(error != null && error.length() > 0)
+                    showSettingsAlert();
+
+                error = resultData.getString("SMS system");
+                if(error != null && error.length() > 0)
+                    showGenericAlert("SMS system", error);
+
+                error = resultData.getString("SMS Thread");
+                if(error != null && error.length() > 0)
+                    showGenericAlert("SMS Thread", error);
+
+                error = resultData.getString("Track Thread");
+                if(error != null && error.length() > 0)
+                    showGenericAlert("Track Thread", error);
+                break;
+        }
+        Log.e("CREATE","onReceiveResult "+resultCode);
+        this.appActivated = false;
+        this.changeOnOffButton();
+        this.activateAllFeatures();
+    }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
         savedInstanceState.putBoolean("appActivated", this.appActivated);
-        savedInstanceState.putParcelable("threadGPS", this.threadGPS);
-        savedInstanceState.putParcelable("threadSMS", this.threadSMS);
         savedInstanceState.putBoolean("areThreadsLaunched", this.areThreadsLaunched);
     }
 
@@ -253,8 +349,6 @@ public class InitialScreenActivity extends Activity implements MyCallback{
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         this.appActivated = savedInstanceState.getBoolean("appActivated");
-        this.threadGPS = savedInstanceState.getParcelable("threadGPS");
-        this.threadSMS = savedInstanceState.getParcelable("threadSMS");
         this.areThreadsLaunched = savedInstanceState.getBoolean("areThreadsLaunched");
     }
 

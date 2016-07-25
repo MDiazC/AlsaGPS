@@ -27,9 +27,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-public class ThreadAutomaticSMS extends Thread implements Parcelable {
+public class ThreadAutomaticSMS extends Thread {
     Context context;
-    MyCallback callback;
+    CustomCallback callback;
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     public ThreadAutomaticSMS(Context cntxt) {
@@ -45,12 +45,20 @@ public class ThreadAutomaticSMS extends Thread implements Parcelable {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    sendSMS();
+                    try {
+                        boolean result = sendSMS();
+                        callback.serviceFinished(result);
+                        stopThread();
+                    } catch (Exception e){
+                        Log.e("CREATE", "Exception in ThreadAutomaticSMS");
+                        callback.errorInService("SMS system", e.getMessage());
+                    }
                 }
             }, ip.getTimeWarn()*60*60*1000);
         }catch(Exception e){
             Log.e("CREATE", "Exception in ThreadAutomaticSMS");
-            e.printStackTrace();
+            callback.errorInService("SMS Thread", "Problem in ThreadAutomaticSMS");
+
         }
     }
     public void stopThread(){
@@ -59,42 +67,11 @@ public class ThreadAutomaticSMS extends Thread implements Parcelable {
         mHandler.removeCallbacksAndMessages(null);
     }
 
-    private void sendSMS(){
+    private boolean sendSMS() throws Exception{
         SMSSystem sms = new SMSSystem(this.context);
-        sms.sendAutomaticSMS();
 
         Log.e("CREATE", "run SMS");
-        this.stopThread();
-        callback.stopApp();
-    }
 
-
-    // Parcelable functions
-
-    private int mData;
-
-    public int describeContents() {
-        return 0;
-    }
-
-    /** save object in parcel */
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeInt(mData);
-    }
-
-    public static final Parcelable.Creator<ThreadAutomaticSMS> CREATOR
-            = new Parcelable.Creator<ThreadAutomaticSMS>() {
-        public ThreadAutomaticSMS createFromParcel(Parcel in) {
-            return new ThreadAutomaticSMS(in);
-        }
-
-        public ThreadAutomaticSMS[] newArray(int size) {
-            return new ThreadAutomaticSMS[size];
-        }
-    };
-
-    /** recreate object from parcel */
-    private ThreadAutomaticSMS(Parcel in) {
-        mData = in.readInt();
+        return sms.sendAutomaticSMS();
     }
 }

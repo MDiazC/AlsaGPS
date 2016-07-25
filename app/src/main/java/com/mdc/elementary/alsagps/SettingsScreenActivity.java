@@ -235,7 +235,11 @@ public class SettingsScreenActivity extends Activity {
         });
 
         // Showing Alert Message
-        alertDialog.show();
+        try {
+            alertDialog.show();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void hideKeyboard(View v) {
